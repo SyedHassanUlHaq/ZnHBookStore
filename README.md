@@ -47,8 +47,6 @@ cd ZnH-Book-Store
 python3 manage.py runserver
 ```
 
-### 4.
-
 ## Technologies Used:
 
 - **Django:** A powerful web framework for building robust and scalable web applications.
