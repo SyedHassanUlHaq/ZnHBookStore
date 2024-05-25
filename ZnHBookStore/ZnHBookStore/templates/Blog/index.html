@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <title> ZnH Book Store </title>
+     <style>
+       
+      .col-md-3
+      {
+        display: inline-block;
+        margin-left:-4px;
+      }
+      .carousel-indicators .active {
+        background-color: blue;
+      }
+      .col-md-3 img{
+        width: 170px;
+        height: 200px;
+      }
+      body .carousel-indicator li{
+        background-color: blue;
+      }
+      body .carousel-indicators{
+        bottom: 0;
+      }
+      body .carousel-control-prev-icon,
+      body .carousel-control-next-icon{
+        background-color: blue;
+      }
+      .carousel-control-prev,
+      .carousel-control-next{
+        top: auto;
+        bottom: auto;
+        padding-top: 222px;
+      }
+      body .no-padding{
+        padding-left: 0;
+        padding-right: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+          <a class="navbar-brand" href="/">ZnH Book Store</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+  
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav mr-auto">
+                  <li class="nav-item">
+                      <a class="nav-link" href="/">Home</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="/Ex_Routines/">Exercise Routines</a>
+                  </li>
+  
+                  <li class="nav-item">
+                      <a class="nav-link" href="/Meal_Tracker/">Meal Tracker</a>
+                  </li>
+  
+                  <li class="nav-item active">
+                      <a class="nav-link" href="/Blog/">Blog</a>
+                  </li>
+  
+                  <li class="nav-item">
+                      <a class="nav-link" href="/Activity_Tracker/">Activity Tracker</a>
+                  </li>
+              </ul>
+              <form class="form-inline my-2 my-lg-0">
+                  {% csrf_token %}
+                  <a class="btn btn-outline-success my-2 my-sm-0" href="{% url 'logout' %}">Logout</a>
+              </form>
+          </div>
+      </div>
+  </nav>
+  <main role="main">
+
+    <div class="jumbotron">
+      <div class="container">
+        <h1 class="display-3">ZnH - Book Store!</h1>
+        <p>Welcome to ZnH Book Store, where we believe that every page you turn enriches your world. In a society bustling with information, our carefully curated collection of books is designed to be your ultimate companion in the journey of knowledge and entertainment. Whether you're a literature aficionado, a casual reader, or a scholarly researcher, our selection is tailored to meet your diverse reading needs, helping you explore, understand, and appreciate new ideas. At ZnH Book Store, we're not just about selling books; we're about fostering a community of informed, inspired, and enlightened individuals. Our extensive range of books spans various genres and topics, offering the latest in academic insights, thrilling narratives, and timeless classics. Each book is more than just paper and ink; it's a gateway to different worlds, encouraging you to set and achieve your personal and intellectual goals.</p>
+        <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more »</a></p>
+      </div>
+    </div>
+  
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <h2>Features That Set Us Apart</h2>
+          <p>Precise Genre Curation: Dive into the details with our meticulously curated book selections. Whether you're seeking literary classics, thrilling mysteries, or insightful non-fiction, our collection is organized to help you find books that match your interests and goals.
+            Expert Recommendations: Keep your reading list fresh and exciting with personalized recommendations from our literary experts. We help guide your reading journey, ensuring each book is a valuable addition to your collection.
+            Insights for Deeper Understanding: Enhance your reading experience with detailed reviews and summaries available for each title. Our insights help you choose books that suit your mood and interests, ensuring every read is engaging.
+            Exclusive Book Events: Say goodbye to generic book launches. At ZnH Book Store, we host exclusive author events and book signings, providing you with unique opportunities to connect with your favorite authors and fellow book lovers.
+            </p>
+          <p><a class="btn btn-secondary" href="#" role="button">View details »</a></p>
+        </div>
+        <div class="col-md-4">
+          <h2>Seamless Integration</h2>
+          <p>ZnH Book Store seamlessly integrates into your daily life. Connect with our user-friendly website to browse our vast collection, read reviews, and make purchases. Our online platform syncs effortlessly with all your devices, putting the joy of reading right at your fingertips. Whether at home or on the go, our digital features ensure you're always just a click away from your next great read.</p>
+          <p><a class="btn btn-secondary" href="#" role="button">View details »</a></p>
+        </div>
+        <div class="col-md-4">
+          <h2>Join the ZnH Community</h2>
+          <p>Embark on a literary journey like never before by joining the ZnH Book Store community. Connect with fellow book lovers, share your reviews, and inspire others with your insights. Our community is a supportive space for readers of all genres, fostering a culture of learning and shared enthusiasm for books.</p>
+          <p><a class="btn btn-secondary" href="#" role="button">View details »</a></p>
+        </div>
+      </div>
+  
+      <hr>
+  
+    </div>
+  
+  </main>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  </body>
+</html>
