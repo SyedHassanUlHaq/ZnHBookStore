@@ -47,15 +47,12 @@ def signup(request):
     login_page_settings = LoginPageSettings.objects.first()
     return render(request, 'signup/index.html', {'login_page_settings': login_page_settings, 'form': form})
 
-def signup(request):
+def custom_logout(request):
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Account created successfully. Please log in.')
-            return redirect('loginn')
-    else:
-        form = CustomUserCreationForm()
+        logout(request)
+        return redirect('loginn')
+    return redirect('loginn')
 
-    login_page_settings = LoginPageSettings.objects.first()
-    return render(request, 'signup/index.html', {'login_page_settings': login_page_settings, 'form': form})
+# @login_required
+def blog(request):
+    return render(request, 'Blog/index.html')
