@@ -46,3 +46,16 @@ def signup(request):
 
     login_page_settings = LoginPageSettings.objects.first()
     return render(request, 'signup/index.html', {'login_page_settings': login_page_settings, 'form': form})
+
+def signup(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Account created successfully. Please log in.')
+            return redirect('loginn')
+    else:
+        form = CustomUserCreationForm()
+
+    login_page_settings = LoginPageSettings.objects.first()
+    return render(request, 'signup/index.html', {'login_page_settings': login_page_settings, 'form': form})
