@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+        crossorigin="anonymous">
+
+    <title>{{ product.routine_name }} -- Gym Freak</title>
+    {% load static %}
+    <style>
+      body {
+        background-image: url('{% static "GymFreak/images/back.jpg" %}');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+      .col-md-3 {
+        display: inline-block;
+        margin-left: -4px;
+      }
+
+      .carousel-indicators .active {
+        background-color: blue;
+      }
+
+      .col-md-3 img {
+        width: 170px;
+        height: 200px;
+      }
+
+      body .carousel-indicator li {
+        background-color: blue;
+      }
+
+      body .carousel-indicators {
+        bottom: 0;
+      }
+
+      body .carousel-control-prev-icon,
+      body .carousel-control-next-icon {
+        background-color: blue;
+      }
+
+        .carousel-control-prev,
+        .carousel-control-next {
+            top: auto;
+            bottom: auto;
+            padding-top: 222px;
+        }
+
+        body .no-padding {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .exercise-details {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px; 
+        }
+
+        .exercise-details img {
+            width: 100%; 
+            border-radius: 8px; 
+            margin-bottom: 15px; 
+        }
+
+        .exercise-steps {
+            max-width: 800px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 10px;
+            padding: 20px; 
+            margin-top: 20px; 
+            background-color: white;
+        }
+
+        .row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .col-md-2 {
+            flex: 0 0 16.66667%;
+            max-width: 16.66667%;
+            position: relative;
+        }
+
+        .mb-3 {
+            margin-bottom: 1rem;
+        }
+
+        .img-fluid {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px; 
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .col-md-2:hover .img-fluid {
+            transform: scale(1.5);
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Optional: Style the Step text */
+        .text-center {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">Gym Freak</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/BookStore/">BookStore</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/Meal_Tracker/">Meal Tracker</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/Blog/">Blog</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/Activity_Tracker/">Activity Tracker</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                {% csrf_token %}
+                <a class="btn btn-outline-success my-2 my-sm-0" href="{% url 'logout' %}">Logout</a>
+            </form>
+        </div>
+    </div>
+</nav>
+<div class="container my-4 exercise-details">
+  <div class="row">
+      <div class="col-md-4">
+          <img src="{{ product.image.url }}" alt="{{ product.routine_name }}">
+      </div>
+      <div class="col-md-8">
+          <h5 style="font-size: 32px; font-weight: bold; color: #007bff; border-bottom: 2px solid #007bff; padding-bottom: 10px;">{{ product.routine_name }}</h5>
+          <br>
+          <br>
+          <p style="font-size: 18px; color: #555;">{{ product.desc }}</p>
+      </div>
+  </div>
+</div>
+
+<div class="exercise-steps">
+  <h2 style="font-size: 32px; font-weight: bold; color: #007bff; border-bottom: 2px solid #007bff; padding-bottom: 10px;">Exercise Steps</h2>
+  <div class="row">
+      <div class="col-md-2 mb-3">
+          <img src="{{ product.step1_image.url }}" alt="Step 1" class="img-fluid">
+          <p class="text-center mt-2">Step 1</p>
+      </div>
+      <div class="col-md-2 mb-3">
+        <img src="{{ product.step2_image.url }}" alt="Step 2" class="img-fluid">
+        <p class="text-center mt-2">Step 2</p>
+    </div>
+    <div class="col-md-2 mb-3">
+      <img src="{{ product.step3_image.url }}" alt="Step 3" class="img-fluid">
+      <p class="text-center mt-2">Step 3</p>
+  </div>
+  <div class="col-md-2 mb-3">
+    <img src="{{ product.step4_image.url }}" alt="Step 4" class="img-fluid">
+    <p class="text-center mt-2">Step 4</p>
+</div>
+<div class="col-md-2 mb-3">
+  <img src="{{ product.step5_image.url }}" alt="Step 5" class="img-fluid">
+  <p class="text-center mt-2">Step 5</p>
+</div>
+<div class="col-md-2 mb-3">
+  <img src="{{ product.step6_image.url }}" alt="Step 6" class="img-fluid">
+  <p class="text-center mt-2">Step 6</p>
+</div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+  integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+  crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+  integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+  crossorigin="anonymous"></script>
+
+</body>
+</html>
