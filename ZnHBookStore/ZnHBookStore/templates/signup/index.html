@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZnH Book Store Login</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: url('{{ login_page_settings.background_image.url }}') no-repeat center center fixed;
+            background-size: cover;
+            backdrop-filter: blur(5px);
+        }
+
+        .signup-container {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            max-width: 600px;
+            width: 90%;
+            height: 600px;
+        }
+
+        .signup-form {
+            padding: 20px;
+            flex: 1;
+            overflow-y: auto;
+            overflow-y: auto; 
+            max-height: 400px;
+        }
+
+        .signup-image {
+            flex: 1;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 16px;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            box-sizing: border-box;
+            border: 1px solid #bbb4b4;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #550b0b;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 16px;
+        }
+
+        button:hover {
+            background-color: #880909;
+        }
+        a {
+        display: inline-block; 
+        text-decoration: none; 
+        background-color: #550b0b;
+        color: #fff;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 16px;
+        text-align: center;
+        }
+        a:hover {
+        background-color: #880909;
+        }
+        p {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .signup-form button:last-child {
+            margin-top: 8px;
+        }
+
+        .forgot-password {
+            text-align: left;
+            margin-top: 16px;
+            color: #070707;
+        }
+
+        .file-input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .file-input-container label {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .file-input-container input[type="file"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f8f8f8;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .file-input-container input[type="file"]:hover {
+            background-color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <div class="signup-form">
+            <h2>Signup</h2>
+            <form id="signup-form" method="post" enctype="multipart/form-data" onsubmit="submitForm(event)">
+    {% csrf_token %}
+    {{ form.as_p }}
+    
+    {% if messages %}
+        {% for message in messages %}
+            <p class="success-message">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+    
+    <button type="submit">Signup</button>
+</form>
+            
+            <a href="{% url 'loginn' %}">Have an account? Login</a>
+        </div>
+    </div>
+</body>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function submitForm() {
+        document.getElementById('signup-form').submit();
+    }
+</script>
+</html>
