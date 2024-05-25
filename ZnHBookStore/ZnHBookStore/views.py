@@ -6,7 +6,8 @@ from django.contrib.auth import login, authenticate, logout
 from .forms import CustomUserCreationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import LoginPageSettings
+from .models import LoginPageSettings, bookstore
+from math import ceil
 
 # Create your views here.
 
@@ -56,3 +57,19 @@ def custom_logout(request):
 # @login_required
 def blog(request):
     return render(request, 'Blog/index.html')
+
+def BookStore(request):
+    categories = bookstore.objects.values_list('category', flat=True).distinct()
+
+    allProds = []
+    for category in categories:
+        products = bookstore.objects.filter(category=category)
+        range_values = range(products.count())
+        nSlides = nSlides = (len(products) // 4) + ceil((len(products) / 4) - (len(products) // 4))
+        allProds.append((products, range_values, nSlides))
+
+    return render(request, 'BookStore/index.html', {'allProds': allProds})
+
+def BookView(request, myid):
+    book = BookView.objects.filter(id=myid)
+    return render(request, 'BookStore/bookview.html', {'product': book[0]})

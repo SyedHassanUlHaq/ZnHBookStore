@@ -25,3 +25,21 @@ class CustomUser(AbstractUser):
         verbose_name='user permissions',
         help_text='Specific permissions for this user.',
     )
+    
+class bookstore(models.Model):
+    book_id = models.AutoField
+    book_name = models.CharField(max_length=50)
+    category = models.CharField(max_length=50, default="")
+    subcategory = models.CharField(max_length=50, default="")
+    desc = models.CharField(max_length=1000)
+    pub_date = models.DateField()
+    image = models.ImageField(upload_to='BookStore/images', default="")
+    step1_image = models.ImageField(upload_to='BookStore/step1', default="")
+    step2_image = models.ImageField(upload_to='BookStore/step2', default="")
+    step3_image = models.ImageField(upload_to='BookStore/step3', default="")
+    step4_image = models.ImageField(upload_to='BookStore/step4', default="")
+    step5_image = models.ImageField(upload_to='BookStore/step5', default="")
+    step6_image = models.ImageField(upload_to='BookStore/step6', default="")
+
+    def __str__(self):
+        return self.routine_name
