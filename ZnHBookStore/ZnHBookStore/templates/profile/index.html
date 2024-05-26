@@ -92,16 +92,16 @@
     
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="/">Home</a>
                     </li>
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="/BookStore/">BookStore</a>
                     </li>
     
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link" href="/Meal_Tracker/">Meal Tracker</a>
-                    </li>
+                    </li> -->
     
                     <li class="nav-item">
                         <a class="nav-link" href="/Blog/">Blog</a>
@@ -135,155 +135,90 @@
         <h3 class="text-primary">{{ user_name }}</h3>
         <p><strong>Email:</strong> {{ user_email }}</p>
         <p><strong>Contact Number:</strong> {{ user_contact }}</p>
-        <form method="post" class="form-inline my-2 my-lg-0">
-          {% csrf_token %}
-          <button type="submit" name="bmi" class="btn btn-primary btn-block mb-2">BMI</button>
-          <button type="submit" name="calories_consumed" class="btn btn-primary btn-block mb-2">Calories Consumed</button>
-          <button type="submit" name="calories_burned" class="btn btn-primary btn-block mb-2">Calories Burned</button>
-      </form>
-      </div>
-      
-      <div class="col-md-9 main-section">
-        {% if thank %}
-          <div class="mt-3">
-            <br>
-            <br>
-            <p>Total Calories: <strong>{{ total_calories }}</strong></p>
-          </div>
-        {% endif %}
 
-        <div class="table-responsive">
-          {% if display_bmi_table %}
-            <table class="table table-bordered table-hover">
-              <thead class="thead-light">
-                <tr>
-                  <th>Date</th>
-                  <th>Time</th>
-                  <th>BMI Value</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for entry in bmi_entries %}
-                  <tr>
-                    <td>{{ entry.date }}</td>
-                    <td>{{ entry.time }}</td>
-                    <td>{{ entry.bmi_value }}</td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-            <div class="chart-container">
-              <canvas id="myLineChart"></canvas>
-            </div>
-          {% elif display_calories_consumed_table %}
-            <table class="table table-bordered table-hover">
-              <thead class="thead-light">
-                <tr>
-                  <th>Date</th>
-                  <th>Time</th>
-                  <th>Calories Consumed</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for entry in calorie_entries %}
-                  <tr>
-                    <td>{{ entry.date }}</td>
-                    <td>{{ entry.time }}</td>
-                    <td>{{ entry.calories_consumed }}</td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-            <div class="chart-container">
-              <canvas id="myLineChart"></canvas>
-            </div>
-          {% elif display_calories_burned_table %}
-            <table class="table table-bordered table-hover">
-              <thead class="thead-light">
-                <tr>
-                  <th>Date</th>
-                  <th>Time</th>
-                  <th>Calories Burned</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for entry in calories_burned_entries %}
-                  <tr>
-                    <td>{{ entry.date }}</td>
-                    <td>{{ entry.time }}</td>
-                    <td>{{ entry.calories_burned }}</td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-            <div class="chart-container">
-              <canvas id="myLineChart"></canvas>
-            </div>
-          {% endif %}
-        </div>
       </div>
-  </div>
+    </div>
+</div>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-</body>
-<!-- <script>
-  function createLineChart(labels, data, chartTitle, xAxisLabel, yAxisLabel, chartContainerId) {
-    var ctx = document.getElementById(chartContainerId).getContext('2d');
-    var myLineChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: chartTitle,
-          data: data,
-          borderColor: 'rgba(75, 192, 192, 1)',
-          borderWidth: 2,
-          fill: false
-        }]
-      },
-      options: {
-        scales: {
-          x: [{
-            scaleLabel: {
-              display: true,
-              labelString: xAxisLabel
-            }
-          }],
-          y: [{
-            scaleLabel: {
-              display: true,
-              labelString: yAxisLabel
-            }
-          }]
+  <script>
+  // Initialize or update the cart from localStorage
+  let cart = JSON.parse(localStorage.getItem('cart')) || {};
+  updateCart();
+
+  // Event delegation to handle cart item additions dynamically
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelector('.divpr').addEventListener('click', function(event) {
+      if (event.target.classList.contains('cart')) {
+        const idstr = event.target.id.toString();
+        let qty, name;
+        if (cart[idstr]) {
+          cart[idstr][0] += 1;
+        } else {
+          qty = 1;
+          name = document.getElementById('name' + idstr).innerText;
+          cart[idstr] = [qty, name];
         }
+        updateCart();
+      } else if (event.target.classList.contains('minus') || event.target.classList.contains('plus')) {
+        adjustItemQuantity(event.target);
       }
     });
+
+    // Initialize popover for the cart
+    $('#popcart').popover({
+      html: true,
+      trigger: 'focus'
+    });
+    updatePopover();
+  });
+
+  function updateCart() {
+    let sum = 0;
+    for (let item in cart) {
+      sum += cart[item][0];
+      let itemDisplay = document.getElementById('div' + item);
+      if (itemDisplay) {
+        itemDisplay.innerHTML = `<button id='minus${item}' class='btn btn-primary minus'>-</button>
+                                 <span id='val${item}'>${cart[item][0]}</span>
+                                 <button id='plus${item}' class='btn btn-primary plus'>+</button>`;
+      }
+    }
+    localStorage.setItem('cart', JSON.stringify(cart));
+    document.getElementById('cart').textContent = sum;
+    updatePopover();
   }
 
-  // Sample data for testing
-  var sampleLabels = [];
-  var sampleData = [];
+  function updatePopover() {
+    let popStr = "<h5>Cart for your items in my shopping cart</h5><div class='mx-2 my-2'>";
+    let i = 1;
+    for (let item in cart) {
+      popStr += `<b>${i}</b>. ${cart[item][1].slice(0, 19)}... Qty: ${cart[item][0]}<br>`;
+      i++;
+    }
+    popStr += "</div><a href='/checkout/'><button class='btn btn-primary' id='checkout'>Checkout</button></a> "
+            + "<button class='btn btn-primary' onclick='clearCart()' id='clearCart'>Clear Cart</button>";
 
-  // Modify the following logic based on the data from your Django backend
-  {% if display_bmi_table %}
-    {% for entry in bmi_entries %}
-      sampleLabels.push("{{ entry.date }}");
-      sampleData.push({{ entry.bmi_value }});
-    {% endfor %}
-  {% elif display_calories_consumed_table %}
-    {% for entry in calorie_entries %}
-      sampleLabels.push("{{ entry.date }}");
-      sampleData.push({{ entry.calories_consumed }});
-    {% endfor %}
-  {% elif display_calories_burned_table %}
-    {% for entry in calories_burned_entries %}
-      sampleLabels.push("{{ entry.date }}");
-      sampleData.push({{ entry.calories_burned }});
-    {% endfor %}
-  {% endif %}
+    document.getElementById('popcart').setAttribute('data-content', popStr);
+  }
+  
+  function clearCart() {
+    localStorage.clear();
+    cart = {};
+    updateCart();
+  }
 
-  createLineChart(sampleLabels, sampleData, 'Sample Line Chart', 'Date', 'Value', 'myLineChart');
-</script> -->
+  function adjustItemQuantity(button) {
+    const id = button.id.slice(5);
+    const action = button.classList.contains('minus') ? -1 : 1;
+    if (cart['pr' + id]) {
+      cart['pr' + id][0] = Math.max(0, cart['pr' + id][0] + action);
+      document.getElementById('valpr' + id).textContent = cart['pr' + id][0];
+      updateCart();
+    }
+  }
+  </script>
+</body>
 </html>
