@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <title>My Awesome Cart Tracker</title>
+    <style>
+        .col-md-3
+        {
+            display: inline-block;
+            margin-left:-4px;
+        }
+        .carousel-indicators .active{
+            background-color: blue;
+        }
+        .col-md-3 img{
+            width: 170px;
+            height: 200px;
+        }
+        body .carousel-indicator li{
+            background-color: blue;
+        }
+        body .carousel-indicators{
+            bottom: 0;
+        }
+        body .carousel-control-prev-icon,
+        body .carousel-control-next-icon{
+            background-color: blue;
+        }
+        .carousel-control-prev,
+        .carousel-control-next{
+            top: auto;
+            bottom: auto;
+            padding-top: 222px;
+        }
+        body .no-padding{
+            padding-left: 0;
+            padding-right: 0;
+        }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">ZnH Book Store</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+    
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/BookStore/">BookStore</a>
+                    </li>
+    
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Meal_Tracker/">Meal Tracker</a>
+                    </li>
+    
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Blog/">Blog</a>
+                    </li>
+    
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Tracker/">Tracker</a>
+                  </li>
+              </ul>
+              <button type="button" class="btn btn-secondary mx-2" id="popcart" data-container="body" data-toggle="popover" data-placement="bottom" data-html="true" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">
+              Cart(<span id="cart">0</span>)
+              </button>
+              <form class="form-inline my-2 my-lg-0">
+                  {% csrf_token %}
+                  <a class="btn btn-outline-success my-2 my-sm-0" href="{% url 'logout' %}">Logout</a>
+              </form>
+            </div>
+        </div>
+    </nav>
+<div class="container">
+    {{response}}
+    <div class="col my-4">
+
+        <h2>Payment status regarding your order Id {{response.ORDERID}}</h2>
+        {% if response.RESPCODE == '01' %}
+        ORDER SUCCESS
+        {% else %}
+        ORDER FAILURE
+        {% endif%}
+
+    </div>
+
+</div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  </body>
+</html>
