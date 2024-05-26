@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import bookstore, LoginPageSettings
+from .models import BookStore, LoginPageSettings
 
-admin.site.register(bookstore)
+admin.site.register(BookStore)
 admin.site.register(LoginPageSettings)

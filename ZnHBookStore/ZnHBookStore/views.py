@@ -1,12 +1,12 @@
 from sqlite3 import IntegrityError
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 import json
 from django.contrib.auth import login, authenticate, logout
 from .forms import CustomUserCreationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import LoginPageSettings, bookstore, Orders, OrderUpdate
+from .models import LoginPageSettings, BookStore, Orders, OrderUpdate
 from math import ceil
 from paytm import Checksum
 MERCHANT_KEY = 'Your-Merchant-Key-Here'
@@ -63,21 +63,21 @@ def index(request):
 def blog(request):
     return render(request, 'Blog/index.html')
 
-def BookStore(request):
-    categories = bookstore.objects.values_list('category', flat=True).distinct()
+def BookStoreView(request):
+    categories = BookStore.objects.values_list('category', flat=True).distinct()
 
     allProds = []
     for category in categories:
-        products = bookstore.objects.filter(category=category)
-        range_values = range(products.count())
-        nSlides = nSlides = (len(products) // 4) + ceil((len(products) / 4) - (len(products) // 4))
-        allProds.append((products, range_values, nSlides))
+        products = BookStore.objects.filter(category=category)
+        n = len(products)
+        nSlides = n // 4 + ceil((n / 4) - (n // 4))
+        allProds.append((products, range(1, nSlides), nSlides))
 
     return render(request, 'BookStore/index.html', {'allProds': allProds})
 
 def BookView(request, myid):
-    book = BookView.objects.filter(id=myid)
-    return render(request, 'BookStore/bookview.html', {'product': book[0]})
+    book = get_object_or_404(BookStore, id=myid)
+    return render(request, 'BookStore/bookview.html', {'product': book})
 
 def checkout(request):
     if request.method=="POST":

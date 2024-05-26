@@ -7,7 +7,7 @@
         integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
         crossorigin="anonymous">
 
-    <title>{{ product.routine_name }} -- ZnH Book Store</title>
+    <title>{{ product.book_name }} -- ZnH Book Store</title>
     {% load static %}
     <style>
       body {
@@ -162,10 +162,10 @@
 <div class="container my-4 exercise-details">
   <div class="row">
       <div class="col-md-4">
-          <img src="{{ product.image.url }}" alt="{{ product.routine_name }}">
+          <img src="{{ product.image.url }}" alt="{{ product.book_name }}">
       </div>
       <div class="col-md-8">
-          <h5 style="font-size: 32px; font-weight: bold; color: #007bff; border-bottom: 2px solid #007bff; padding-bottom: 10px;">{{ product.routine_name }}</h5>
+          <h5 style="font-size: 32px; font-weight: bold; color: #007bff; border-bottom: 2px solid #007bff; padding-bottom: 10px;">{{ product.book_name }}</h5>
           <br>
           <br>
           <p style="font-size: 18px; color: #555;">{{ product.desc }}</p>

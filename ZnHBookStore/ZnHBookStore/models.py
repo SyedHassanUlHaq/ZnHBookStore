@@ -26,8 +26,8 @@ class CustomUser(AbstractUser):
         help_text='Specific permissions for this user.',
     )
     
-class bookstore(models.Model):
-    book_id = models.AutoField
+class BookStore(models.Model):
+    book_id = models.AutoField(primary_key=True)
     book_name = models.CharField(max_length=50)
     category = models.CharField(max_length=50, default="")
     subcategory = models.CharField(max_length=50, default="")
@@ -42,7 +42,7 @@ class bookstore(models.Model):
     step6_image = models.ImageField(upload_to='BookStore/step6', default="")
 
     def __str__(self):
-        return self.routine_name
+        return self.book_name
     
 class Orders(models.Model):
     order_id = models.AutoField(primary_key=True)
