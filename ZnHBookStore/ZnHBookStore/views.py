@@ -56,6 +56,9 @@ def custom_logout(request):
         return redirect('loginn')
     return redirect('loginn')
 
+def index(request):
+    return render(request, 'profile/index.html')
+
 # @login_required
 def blog(request):
     return render(request, 'Blog/index.html')
@@ -149,3 +152,8 @@ def handlerequest(request):
         else:
             print('order was not successful because' + response_dict['RESPMSG'])
     return render(request, 'paymentstatus/paymentstatus.html', {'response': response_dict})
+
+def profile(request):
+    user = request.user
+
+    return render(request, "profile/index.html")

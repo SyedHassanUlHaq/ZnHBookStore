@@ -17,9 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from . import views
+from django.conf import settings
+from django.contrib.auth import views as auth_views
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("", views.profile, name='myprofile'),
     path('loginn/', views.loginn, name='loginn'),
     path('signup/', views.signup, name='signup'),
     path("Blog/", views.blog, name='Blog'),
@@ -29,3 +33,5 @@ urlpatterns = [
     path("checkout/", views.checkout, name="Checkout"),
     path("Tracker/", views.tracker, name="TrackingStatus"),
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
