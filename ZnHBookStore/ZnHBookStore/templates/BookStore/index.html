@@ -1,220 +1,225 @@
-
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <title>Book Store</title>
-    {% load static %}
-    <style>
-      h5 { color: white; }
-      body {
-        background-image: url('{% static "ZnHBookStore/images/back.jpg" %}');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-      }
-      .container { margin-top: 20px; }
-      .carousel-container {
-        background-color: #ffffff;
-        border-radius: 15px;
-        overflow: hidden;
-        margin-top: 20px;
-        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-      }
-      .carousel-inner { border-radius: 15px; }
-      .carousel-control-prev-icon, .carousel-control-next-icon {
-        background-color: #007bff;
-        border-radius: 50%;
-      }
-      .carousel-control-prev, .carousel-control-next {
-        top: auto;
-        bottom: auto;
-        padding-top: 50px;
-      }
-      .card {
-        border: none;
-        border-radius: 15px;
-        transition: transform 0.3s, box-shadow 0.3s;
-      }
-      .card:hover {
-        transform: scale(1.03);
-        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
-      }
-      .card-img-top {
-        border-top-left-radius: 15px;
-        border-top-right-radius: 15px;
-      }
-      .card-body { padding: 1.25rem; }
-      .card-title {
-        font-size: 20px;
-        font-weight: bold;
-        color: #343a40;
-      }
-      .card-text { color: #6c757d; }
-      .btn-primary {
-        background-color: #007bff;
-        border-color: #007bff;
-      }
-      .btn-primary:hover {
-        background-color: #0056b3;
-        border-color: #0056b3;
-      }
-    </style>
-  </head>
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container">
-        <a class="navbar-brand" href="/">ZnH Book Store</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="/">Home</a>
-            </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="/BookStore/">BookStore</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/Meal_Tracker/">Meal Tracker</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/Blog/">Blog</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/Tracker/">Tracker</a>
-            </li>
-          </ul>
-          <button type="button" class="btn btn-secondary mx-2" id="popcart" data-container="body" data-toggle="popover" data-placement="bottom" data-html="true" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">
-            Cart(<span id="cart">0</span>)
-          </button>
-          <form class="form-inline my-2 my-lg-0">
-            {% csrf_token %}
-            <a class="btn btn-outline-success my-2 my-sm-0" href="{% url 'logout' %}">Logout</a>
-          </form>
-        </div>
-      </div>
-    </nav>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <title>Book Store</title>
+  {% load static %}
+  <style>
+    h5 { color: white; }
+    body {
+      background-image: url('{% static "ZnHBookStore/images/back.jpg" %}');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    .container { margin-top: 20px; }
+    .carousel-container {
+      background-color: #ffffff;
+      border-radius: 15px;
+      overflow: hidden;
+      margin-top: 20px;
+      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+    }
+    .carousel-inner { border-radius: 15px; }
+    .carousel-control-prev-icon, .carousel-control-next-icon {
+      background-color: #007bff;
+      border-radius: 50%;
+    }
+    .carousel-control-prev, .carousel-control-next {
+      top: auto;
+      bottom: auto;
+      padding-top: 50px;
+    }
+    .card {
+      border: none;
+      border-radius: 15px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .card:hover {
+      transform: scale(1.03);
+      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    }
+    .card-img-top {
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+    }
+    .card-body { padding: 1.25rem; }
+    .card-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #343a40;
+    }
+    .card-text { color: #6c757d; }
+    .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+    .btn-primary:hover {
+      background-color: #0056b3;
+      border-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-      {% for product, range, nSlides in allProds %}
-      <h5 class="my-4 custom-background">Books for {{ product.0.category }} - Recommended Genre</h5>
-      <div class="row">
-        <div id="demo{{ forloop.counter }}" class="col carousel-container slide my-3" data-ride="carousel">
-          <ul class="carousel-indicators">
-            <li data-target="#demo{{ forloop.counter }}" data-slide-to="0" class="active"></li>
-            {% for i in range %}
-            <li data-target="#demo{{ forloop.parentloop.counter }}" data-slide-to="{{ i }}"></li>
-            {% endfor %}
-          </ul>
-          <div class="container carousel-inner no-padding">
-            <div class="carousel-item active">
-              {% for i in product %}
-              <div class="col-xs-3 col-sm-3 col-md-3">
-                <div class="card align-items-center" style="width: 18rem;">
-                    <img src="{% static i.image.url %}" class="card-img-top" alt="{{ i.book_name }}">
-                    <div class="card-body">
-                        <h5 class="card-title" id="namepr{{ i.id }}">{{ i.book_name }}</h5>
-                        <p class="card-text">{{ i.desc|slice:"0:53" }}...</p>
-
-                        <div class="d-flex justify-content-center align-items-center">
-                            <button class="btn btn-primary cart btn-add-to-cart" data-product-id="{{ i.id }}" data-product-name="{{ i.book_name }}" data-price="{{ i.price }}">Add to Cart</button>
-                            <a href="{% url 'book_detail' i.book_id %}" class="btn btn-info ml-2">View</a>
-                        </div>
-                    </div>
+      <a class="navbar-brand" href="/">ZnH Book Store</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/BookStore/">BookStore</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/Meal_Tracker/">Meal Tracker</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/Blog/">Blog</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/Tracker/">Tracker</a>
+          </li>
+        </ul>
+        <button type="button" class="btn btn-secondary mx-2" id="popcart" data-container="body" data-toggle="popover" data-placement="bottom" data-html="true" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">
+          Cart(<span id="cart">0</span>)
+        </button>
+        <form class="form-inline my-2 my-lg-0">
+          {% csrf_token %}
+          <a class="btn btn-outline-success my-2 my-sm-0" href="{% url 'logout' %}">Logout</a>
+        </form>
+      </div>
+    </div>
+  </nav>
+  <div class="container">
+    {% for product, range, nSlides in allProds %}
+    <h5 class="my-4 custom-background">Books for {{ product.0.category }} - Recommended Books</h5>
+    <div class="row">
+      <div id="demo{{ forloop.counter }}" class="col carousel-container slide my-3" data-ride="carousel">
+        <ul class="carousel-indicators">
+          <li data-target="#demo{{ forloop.counter }}" data-slide-to="0" class="active"></li>
+          {% for i in range %}
+          <li data-target="#demo{{ forloop.parentloop.counter }}" data-slide-to="{{ i }}"></li>
+          {% endfor %}
+        </ul>
+        <div class="container carousel-inner no-padding">
+          <div class="carousel-item active">
+            {% for i in product %}
+            <div class="divpr col-xs-3 col-sm-3 col-md-3">
+              <div class="card align-items-center" style="width: 18rem;">
+                <img src="{{ i.image.url }}" class="card-img-top" alt="{{ i.book_name }}">
+                <div class="card-body">
+                  <h5 class="card-title" id="namepr{{ i.id }}">{{ i.book_name }}</h5>
+                  <p class="card-text">{{ i.desc|slice:"0:53" }}...</p>
+                  <div class="d-flex justify-content-center align-items-center">
+                    <button class="btn btn-primary cart btn-add-to-cart" data-product-id="{{ i.id }}" data-product-name="{{ i.book_name }}" data-price="{{ i.price }}">Add to Cart</button>
+                    <a href="{% url 'book_detail' i.book_id %}" class="btn btn-info ml-2">View</a>
+                  </div>
                 </div>
+              </div>
             </div>
-              {% if forloop.counter|divisibleby:4 and not forloop.last %}
+            {% if forloop.counter|divisibleby:4 and not forloop.last %}
             </div>
             <div class="carousel-item">
-              {% endif %}
-              {% endfor %}
-            </div>
+            {% endif %}
+            {% endfor %}
           </div>
-          <a class="carousel-control-prev" href="#demo{{ forloop.counter }}" data-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-          </a>
-          <a class="carousel-control-next" href="#demo{{ forloop.counter }}" data-slide="next">
-            <span class="carousel-control-next-icon"></span>
-          </a>
         </div>
+        <a class="carousel-control-prev" href="#demo{{ forloop.counter }}" data-slide="prev">
+          <span class="carousel-control-prev-icon"></span>
+        </a>
+        <a class="carousel-control-next" href="#demo{{ forloop.counter }}" data-slide="next">
+          <span class="carousel-control-next-icon"></span>
+        </a>
       </div>
-      {% endfor %}
     </div>
-    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-    <script src="index.js"></script>
-    <!-- <script>
-        // Check if the 'cart' key exists in localStorage, if not initialize it
-        if (localStorage.getItem('cart') === null) {
-            localStorage.setItem('cart', JSON.stringify({}));
+    {% endfor %}
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  <script>
+    // Initialize or update the cart from localStorage
+    let cart = JSON.parse(localStorage.getItem('cart')) || {};
+    updateCart();
+
+    // Event delegation to handle cart item additions dynamically
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelector('.divpr').addEventListener('click', function(event) {
+        if (event.target.classList.contains('cart')) {
+          const idstr = event.target.id.toString();
+          let qty, name;
+          if (cart[idstr]) {
+            cart[idstr][0] += 1;
+          } else {
+            qty = 1;
+            name = document.getElementById('name' + idstr).innerText;
+            cart[idstr] = [qty, name];
+          }
+          updateCart();
+        } else if (event.target.classList.contains('minus') || event.target.classList.contains('plus')) {
+          adjustItemQuantity(event.target);
         }
-    
-        // Load cart data from local storage
-        let cart = JSON.parse(localStorage.getItem('cart'));
-        updateCartUI();
-    
-        // Function to add an item to the cart
-        function addToCart(productId, productName, price) {
-            if (cart[productId]) {
-                cart[productId].qty += 1;
-            } else {
-                cart[productId] = {
-                    name: productName,
-                    qty: 1,
-                    price: price
-                };
-            }
-    
-            // Save the updated cart back to local storage
-            localStorage.setItem('cart', JSON.stringify(cart));
-            updateCartUI();
+      });
+
+      // Initialize popover for the cart
+      $('#popcart').popover({
+        html: true,
+        trigger: 'focus'
+      });
+      updatePopover();
+    });
+
+    function updateCart() {
+      let sum = 0;
+      for (let item in cart) {
+        sum += cart[item][0];
+        let itemDisplay = document.getElementById('div' + item);
+        if (itemDisplay) {
+          itemDisplay.innerHTML = `<button id='minus${item}' class='btn btn-primary minus'>-</button>
+                                   <span id='val${item}'>${cart[item][0]}</span>
+                                   <button id='plus${item}' class='btn btn-primary plus'>+</button>`;
         }
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+      document.getElementById('cart').textContent = sum;
+      updatePopover();
+    }
+
+    function updatePopover() {
+      let popStr = "<h5>Cart for your items in my shopping cart</h5><div class='mx-2 my-2'>";
+      let i = 1;
+      for (let item in cart) {
+        popStr += `<b>${i}</b>. ${cart[item][1].slice(0, 19)}... Qty: ${cart[item][0]}<br>`;
+        i++;
+      }
+      popStr += "</div><a href='/checkout/'><button class='btn btn-primary' id='checkout'>Checkout</button></a> "
+              + "<button class='btn btn-primary' onclick='clearCart()' id='clearCart'>Clear Cart</button>";
+
+      document.getElementById('popcart').setAttribute('data-content', popStr);
+    }
     
-        // Function to update the cart UI
-        function updateCartUI() {
-            let sumItems = 0;
-            let totalPrice = 0;
-            let cartItems = document.getElementById('cart-items');  // Ensure this element exists in your HTML
-            cartItems.innerHTML = ''; // Clear current cart items
-    
-            for (let id in cart) {
-                let item = cart[id];
-                let itemTotal = item.qty * item.price;
-                totalPrice += itemTotal;
-                sumItems += item.qty;
-    
-                let itemHTML = `<li class="list-group-item d-flex justify-content-between align-items-center">
-                    ${item.name}
-                    <span class="badge badge-primary badge-pill">${item.qty}</span>
-                    <span>$${itemTotal.toFixed(2)}</span>
-                </li>`;
-                cartItems.innerHTML += itemHTML;
-            }
-    
-            document.getElementById('cart').textContent = sumItems;  // Update cart count in the navbar
-            document.getElementById('totalPrice').textContent = `$${totalPrice.toFixed(2)}`;  // Update total price displayed
-        }
-    
-        // Optionally, add event listeners for add-to-cart buttons
-        document.querySelectorAll('.btn-add-to-cart').forEach(button => {
-            button.addEventListener('click', function() {
-                let productId = this.dataset.productId;
-                let productName = this.dataset.productName;
-                let price = parseFloat(this.dataset.price);
-                addToCart(productId, productName, price);
-            });
-        });
-    
-        // Clear the cart
-        function clearCart() {
-            localStorage.setItem('cart', JSON.stringify({}));
-            cart = {};
-            updateCartUI();
-        }
-    </script> -->
+    function clearCart() {
+      localStorage.clear();
+      cart = {};
+      updateCart();
+    }
+
+    function adjustItemQuantity(button) {
+      const id = button.id.slice(5);
+      const action = button.classList.contains('minus') ? -1 : 1;
+      if (cart['pr' + id]) {
+        cart['pr' + id][0] = Math.max(0, cart['pr' + id][0] + action);
+        document.getElementById('valpr' + id).textContent = cart['pr' + id][0];
+        updateCart();
+      }
+    }
+  </script>
 </body>
 </html>

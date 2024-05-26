@@ -1,4 +1,3 @@
-from sqlite3 import IntegrityError
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 import json
@@ -66,7 +65,7 @@ def blog(request):
 def BookStoreView(request):
     categories = BookStore.objects.values_list('category', flat=True).distinct()
 
-    allProds = []
+    allProds = []           # This code will not be executed
     for category in categories:
         products = BookStore.objects.filter(category=category)
         n = len(products)
