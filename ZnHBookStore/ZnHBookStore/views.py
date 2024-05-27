@@ -74,8 +74,8 @@ def BookStoreView(request):
 
     return render(request, 'BookStore/index.html', {'allProds': allProds})
 
-def BookView(request, myid):
-    book = get_object_or_404(BookStore, id=myid)
+def BookView(request, book_id):
+    book = get_object_or_404(BookStore, id=book_id)
     return render(request, 'BookStore/bookview.html', {'product': book})
 
 def checkout(request):

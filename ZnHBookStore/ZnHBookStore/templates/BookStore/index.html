@@ -96,10 +96,13 @@
         </ul>
         <button type="button" class="btn btn-secondary mx-2" id="cartButton">
           Cart(<span id="cart">0</span>)
-        </button>
-        <div id="cartPopover" class="popover-custom">
+      </button>
+      <div id="cartPopover" class="popover-custom">
           <h5>Cart for your items in my shopping cart</h5>
           <div class='mx-2 my-2' id="cartItems"></div>
+          <div id="totalPriceContainer">
+              <h5>Total Price: $<span id="totalPrice">0</span></h5>
+          </div>
           <a href='/checkout/'><button class='btn btn-primary' id='checkout'>Checkout</button></a>
           <button class='btn btn-primary' id='clearCart'>Clear Cart</button>
         </div>
@@ -128,13 +131,16 @@
               <div class="card align-items-center" style="width: 18rem;">
                 <img src="{{ i.image.url }}" class="card-img-top" alt="{{ i.book_name }}">
                 <div class="card-body">
-                  <h5 class="card-title" id="namepr{{ i.id }}">{{ i.book_name }}</h5>
-                  <p class="card-text">{{ i.desc|slice:"0:53" }}...</p>
-                  <div id="buttonContainer{{ i.id }}"></div> <!-- Added the div for buttons -->
-                  <div class="d-flex justify-content-center align-items-center">
-                    <button class="btn btn-primary cart btn-add-to-cart" data-product-id="{{ i.id }}" data-product-name="{{ i.book_name }}" data-price="{{ i.price }}">Add to Cart</button>
-                    <a href="{% url 'book_detail' i.book_id %}" class="btn btn-info ml-2">View</a>
-                  </div>
+                    <h5 class="card-title" id="namepr{{ i.id }}">{{ i.book_name }}</h5>
+                    <p class="card-text">{{ i.desc|slice:"0:53" }}...</p>
+                    <p class="card-text"><strong>Price: ${{ i.price }}</strong></p>
+                    <div id="buttonContainer{{ i.id }}"></div>
+                    <div class="d-flex justify-content-center align-items-center">
+                        <button class="btn btn-primary cart btn-add-to-cart" data-product-id="{{ i.id }}" data-product-name="{{ i.book_name }}" data-price="{{ i.price }}">Add to Cart</button>
+                        <a href="{% url 'book_detail' i.book_id %}" class="btn btn-info ml-2">View</a>
+
+                    </div>
+                </div>
                 </div>
               </div>
             </div>
@@ -170,88 +176,85 @@
   
     // Event delegation to handle cart item additions dynamically
     document.addEventListener('DOMContentLoaded', function() {
-      document.querySelectorAll('.divpr').forEach(function(div) {
-        div.addEventListener('click', function(event) {
-          if (event.target.classList.contains('cart')) {
-            const idstr = event.target.getAttribute('data-product-id').toString();
-            let qty, name;
-            if (cart[idstr]) {
-              cart[idstr][0] += 1;
-            } else {
-              qty = 1;
-              name = event.target.getAttribute('data-product-name');
-              cart[idstr] = [qty, name];
-            }
-            updateCart();
-          } else if (event.target.classList.contains('minus') || event.target.classList.contains('plus')) {
-            adjustItemQuantity(event.target);
-          }
-        });
-      });
-      
-      // Bind the click event for the Clear Cart button
-      document.getElementById('clearCart').addEventListener('click', function(event) {
-        event.stopPropagation(); // Prevent any default action
-        clearCart();
-      });
+  document.querySelectorAll('.divpr').forEach(function(div) {
+    div.addEventListener('click', function(event) {
+      if (event.target.classList.contains('cart')) {
+        const productId = event.target.getAttribute('data-product-id').toString();
+        const productName = event.target.getAttribute('data-product-name');
+        const productPrice = parseFloat(event.target.getAttribute('data-price'));
 
-      // Show the cart popover when the cart button is clicked
-      document.getElementById('cartButton').addEventListener('click', function(event) {
-        event.stopPropagation(); // Prevent any default action
-        toggleCartPopover();
-      });
-
-      // Hide the cart popover if clicked outside of it
-      document.addEventListener('click', function(event) {
-        const cartPopover = document.getElementById('cartPopover');
-        if (!cartPopover.contains(event.target) && event.target.id !== 'cartButton') {
-          cartPopover.style.display = 'none'; // Hide the popover
+        if (cart[productId]) {
+          cart[productId][0] += 1;
+        } else {
+          cart[productId] = [1, productName, productPrice];
         }
-      });
-    });
-
-    function toggleCartPopover() {
-      const cartPopover = document.getElementById('cartPopover');
-      cartPopover.style.display = cartPopover.style.display === 'block' ? 'none' : 'block';
-      if (cartPopover.style.display === 'block') {
-        positionCartPopover();
+        updateCart();
+      } else if (event.target.classList.contains('minus') || event.target.classList.contains('plus')) {
+        adjustItemQuantity(event.target);
       }
-    }
+    });
+  });
 
-    function positionCartPopover() {
-      const cartButton = document.getElementById('cartButton');
-      const cartPopover = document.getElementById('cartPopover');
-      const rect = cartButton.getBoundingClientRect();
-      cartPopover.style.top = `${rect.bottom + window.scrollY}px`;
-      cartPopover.style.left = `${rect.left + window.scrollX}px`;
-    }
+  document.getElementById('clearCart').addEventListener('click', function(event) {
+    clearCart();
+  });
+
+  document.getElementById('cartButton').addEventListener('click', function(event) {
+    toggleCartPopover();
+  });
+
+  // Optionally add a close button to hide the popover
+  document.getElementById('closeCartPopover').addEventListener('click', function() {
+    document.getElementById('cartPopover').style.display = 'none';
+  });
+});
+
+function toggleCartPopover() {
+  const cartPopover = document.getElementById('cartPopover');
+  cartPopover.style.display = cartPopover.style.display === 'block' ? 'none' : 'block';
+  if (cartPopover.style.display === 'block') {
+    positionCartPopover();
+  }
+}
+
+function positionCartPopover() {
+  const cartButton = document.getElementById('cartButton');
+  const cartPopover = document.getElementById('cartPopover');
+  const rect = cartButton.getBoundingClientRect();
+  cartPopover.style.top = `${rect.bottom + window.scrollY}px`;
+  cartPopover.style.left = `${rect.left + window.scrollX}px`;
+}
   
     function updateCart() {
-      let sum = 0;
-      for (let item in cart) {
-        sum += cart[item][0];
-        let itemDisplay = document.getElementById('buttonContainer' + item);
-        if (itemDisplay) {
-          itemDisplay.innerHTML = `<button id='minus${item}' class='btn btn-primary minus'>-</button>
-                                   <span id='val${item}'>${cart[item][0]}</span>
-                                   <button id='plus${item}' class='btn btn-primary plus'>+</button>`;
-        }
-      }
-      localStorage.setItem('cart', JSON.stringify(cart));
-      document.getElementById('cart').textContent = sum;
-      updatePopover();
+  let totalItems = 0;
+  let totalPrice = 0;  // Total price of all items
+  for (let item in cart) {
+    totalItems += cart[item][0];
+    totalPrice += cart[item][0] * cart[item][2];  // Calculate total cost for each item
+
+    let itemDisplay = document.getElementById('buttonContainer' + item);
+    if (itemDisplay) {
+      itemDisplay.innerHTML = `<button id='minus${item}' class='btn btn-primary minus'>-</button>
+                               <span id='val${item}'>${cart[item][0]}</span>
+                               <button id='plus${item}' class='btn btn-primary plus'>+</button>`;
     }
+  }
+  localStorage.setItem('cart', JSON.stringify(cart));
+  document.getElementById('cart').textContent = totalItems;  // Update the number of items in the cart
+  document.getElementById('totalPrice').textContent = totalPrice.toFixed(2);  // Update total price
+  updatePopover();
+}
+
   
-    function updatePopover() {
-      let popStr = "<div class='mx-2 my-2'>";
-      let i = 1;
-      for (let item in cart) {
-        popStr += `<b>${i}</b>. ${cart[item][1].slice(0, 19)}... Qty: ${cart[item][0]}<br>`;
-        i++;
-      }
-      document.getElementById('cartItems').innerHTML = popStr;
-    }
-  
+function updatePopover() {
+  let popStr = "<div class='mx-2 my-2'>";
+  let i = 1;
+  for (let item in cart) {
+    popStr += `<b>${i}</b>. ${cart[item][1]}... Qty: ${cart[item][0]} Price: $${(cart[item][2] * cart[item][0]).toFixed(2)}<br>`;
+    i++;
+  }
+  document.getElementById('cartItems').innerHTML = popStr;
+}
     function clearCart() {
       localStorage.clear();
       cart = {};

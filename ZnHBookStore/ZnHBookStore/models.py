@@ -40,6 +40,7 @@ class BookStore(models.Model):
     step4_image = models.ImageField(upload_to='BookStore/step4', default="")
     step5_image = models.ImageField(upload_to='BookStore/step5', default="")
     step6_image = models.ImageField(upload_to='BookStore/step6', default="")
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
     def __str__(self):
         return self.book_name
