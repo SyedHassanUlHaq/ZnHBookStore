@@ -98,7 +98,7 @@
             </div>
         <div class="col my-4">
             <h2>Step 2 - Enter Address & Other Details:</h2>
-            <form method="post" action="/shop/checkout/">{% csrf_token %}
+            <form method="post" action="/checkout/">{% csrf_token %}
                 <input type="hidden" name="itemsJson" id="itemsJson">
                     <input type="hidden" name="amount" id="amount">
                         <div class="form-row">
@@ -149,7 +149,51 @@
   crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-    <script href = "checkout.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    var totalPrice = localStorage.getItem('totalPrice'); // Retrieve total price
+    if (totalPrice) {
+        document.getElementById('totalPrice').textContent = totalPrice; // Set the total price in your HTML
+    }
+});
+
+if (localStorage.getItem('cart') == null) {
+    var cart = {};
+} else {
+    cart = JSON.parse(localStorage.getItem('cart'));
+}
+console.log(cart);
+var sum = 0;
+var totalPrice = 0;
+if ($.isEmptyObject(cart)) {
+    //if object is empty
+    mystr = `<p>Your cart is empty, please add some items to your cart before checking out!</p>`
+    $('#items').append(mystr);
+} else {
+    for (item in cart) {
+        let name = cart[item][1];
+        let qty = cart[item][0];
+        let itemPrice = cart[item][2];
+        sum = sum + qty;
+        totalPrice = totalPrice + qty* itemPrice;
+        mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
+                    ${name}
+                    <span class="badge badge-primary badge-pill">${qty}</span>
+                </li>`
+        $('#items').append(mystr);
+    }
+}
+document.getElementById('cart').innerHTML = sum;
+document.getElementById('totalPrice').innerHTML = totalPrice;
+$('#itemsJson').val(JSON.stringify(cart));
+{% if thank %}
+alert('Thanks for ordering with us. Your order is is {{id}}. Use it to track your order using our order tracker');
+localStorage.clear();
+document.location = "/shop";
+{% endif %}
+$('#amount').val($('#totalPrice').html())
+
+    </script>
   </body>
 </html>
 

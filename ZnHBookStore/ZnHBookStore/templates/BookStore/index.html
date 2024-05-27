@@ -176,89 +176,61 @@
   
     // Event delegation to handle cart item additions dynamically
     document.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('.divpr').forEach(function(div) {
-    div.addEventListener('click', function(event) {
-      if (event.target.classList.contains('cart')) {
-        const productId = event.target.getAttribute('data-product-id').toString();
-        const productName = event.target.getAttribute('data-product-name');
-        const productPrice = parseFloat(event.target.getAttribute('data-price'));
-
-        if (cart[productId]) {
-          cart[productId][0] += 1;
+      document.querySelectorAll('.divpr').forEach(function(div) {
+        div.addEventListener('click', function(event) {
+          if (event.target.classList.contains('btn-add-to-cart')) {
+            const productId = event.target.getAttribute('data-product-id').toString();
+            addProductToCart(productId, event.target);
+            replaceAddToCartButton(productId);
+          } else if (event.target.classList.contains('minus') || event.target.classList.contains('plus')) {
+            adjustItemQuantity(event.target);
+          }
+        });
+      });
+  
+      document.getElementById('clearCart').addEventListener('click', function(event) {
+        clearCart();
+      });
+  
+      document.getElementById('cartButton').addEventListener('click', function(event) {
+        toggleCartPopover();
+      });
+  
+      // Optionally add a close button to hide the popover
+      document.getElementById('closeCartPopover').addEventListener('click', function() {
+        document.getElementById('cartPopover').style.display = 'none';
+      });
+  
+      // Check cart status on load to display the correct buttons
+      Object.keys(cart).forEach(productId => {
+        if (cart[productId] && cart[productId][0] > 0) {
+          replaceAddToCartButton(productId);
         } else {
-          cart[productId] = [1, productName, productPrice];
+          restoreAddToCartButton(productId);
         }
-        updateCart();
-      } else if (event.target.classList.contains('minus') || event.target.classList.contains('plus')) {
-        adjustItemQuantity(event.target);
-      }
+      });
     });
-  });
-
-  document.getElementById('clearCart').addEventListener('click', function(event) {
-    clearCart();
-  });
-
-  document.getElementById('cartButton').addEventListener('click', function(event) {
-    toggleCartPopover();
-  });
-
-  // Optionally add a close button to hide the popover
-  document.getElementById('closeCartPopover').addEventListener('click', function() {
-    document.getElementById('cartPopover').style.display = 'none';
-  });
-});
-
-function toggleCartPopover() {
-  const cartPopover = document.getElementById('cartPopover');
-  cartPopover.style.display = cartPopover.style.display === 'block' ? 'none' : 'block';
-  if (cartPopover.style.display === 'block') {
-    positionCartPopover();
-  }
-}
-
-function positionCartPopover() {
-  const cartButton = document.getElementById('cartButton');
-  const cartPopover = document.getElementById('cartPopover');
-  const rect = cartButton.getBoundingClientRect();
-  cartPopover.style.top = `${rect.bottom + window.scrollY}px`;
-  cartPopover.style.left = `${rect.left + window.scrollX}px`;
-}
   
-    function updateCart() {
-  let totalItems = 0;
-  let totalPrice = 0;  // Total price of all items
-  for (let item in cart) {
-    totalItems += cart[item][0];
-    totalPrice += cart[item][0] * cart[item][2];  // Calculate total cost for each item
-
-    let itemDisplay = document.getElementById('buttonContainer' + item);
-    if (itemDisplay) {
-      itemDisplay.innerHTML = `<button id='minus${item}' class='btn btn-primary minus'>-</button>
-                               <span id='val${item}'>${cart[item][0]}</span>
-                               <button id='plus${item}' class='btn btn-primary plus'>+</button>`;
-    }
-  }
-  localStorage.setItem('cart', JSON.stringify(cart));
-  document.getElementById('cart').textContent = totalItems;  // Update the number of items in the cart
-  document.getElementById('totalPrice').textContent = totalPrice.toFixed(2);  // Update total price
-  updatePopover();
-}
-
+    function addProductToCart(productId, target) {
+      const productName = target.getAttribute('data-product-name');
+      const productPrice = parseFloat(target.getAttribute('data-price'));
   
-function updatePopover() {
-  let popStr = "<div class='mx-2 my-2'>";
-  let i = 1;
-  for (let item in cart) {
-    popStr += `<b>${i}</b>. ${cart[item][1]}... Qty: ${cart[item][0]} Price: $${(cart[item][2] * cart[item][0]).toFixed(2)}<br>`;
-    i++;
-  }
-  document.getElementById('cartItems').innerHTML = popStr;
-}
-    function clearCart() {
-      localStorage.clear();
-      cart = {};
+      if (cart[productId]) {
+        cart[productId][0] += 1;
+      } else {
+        cart[productId] = [1, productName, productPrice];
+      }
       updateCart();
+    }
+  
+    function replaceAddToCartButton(productId) {
+      let buttonContainer = document.getElementById('buttonContainer' + productId);
+      buttonContainer.innerHTML = getQuantityButtonsHtml(productId);
+    }
+  
+    function restoreAddToCartButton(productId) {
+      let buttonContainer = document.getElementById('buttonContainer' + productId);
+      buttonContainer.innerHTML = `<button class='btn btn-primary cart btn-add-to-cart' data-product-id='${productId}'>Add to Cart</button>`;
     }
   
     function adjustItemQuantity(button) {
@@ -266,10 +238,80 @@ function updatePopover() {
       const action = button.classList.contains('minus') ? -1 : 1;
       if (cart[id]) {
         cart[id][0] = Math.max(0, cart[id][0] + action);
-        document.getElementById('val' + id).textContent = cart[id][0];
-        updateCart();
+        if (cart[id][0] === 0) {
+          delete cart[id];
+          restoreAddToCartButton(id);
+        } else {
+          document.getElementById('val' + id).textContent = cart[id][0];
+          updateCart();
+        }
       }
     }
-  </script> 
+  
+    function getQuantityButtonsHtml(productId) {
+      return `
+        <button id='minus${productId}' class='btn btn-primary minus'>-</button>
+        <span id='val${productId}'>${cart[productId][0]}</span>
+        <button id='plus${productId}' class='btn btn-primary plus'>+</button>
+      `;
+    }
+  
+    function updateCart() {
+      let totalItems = 0;
+      let totalPrice = 0;
+      for (let item in cart) {
+        totalItems += cart[item][0];
+        totalPrice += cart[item][0] * cart[item][2];
+  
+        let itemDisplay = document.getElementById('buttonContainer' + item);
+        if (itemDisplay && cart[item][0] > 0) {
+          itemDisplay.innerHTML = getQuantityButtonsHtml(item);
+        } else if (itemDisplay) {
+          restoreAddToCartButton(item);
+        }
+      }
+
+      localStorage.setItem('cart', JSON.stringify(cart));
+      localStorage.setItem('totalPrice', totalPrice.toFixed(2)); // Save total price
+      document.getElementById('cart').textContent = totalItems;
+      document.getElementById('totalPrice').textContent = totalPrice.toFixed(2);
+      updatePopover();
+    }
+    function goToCheckout() {
+    updateCart();  // Ensure the cart is updated
+    window.location.href = '/checkout/';
+}
+    function updatePopover() {
+      let popStr = "<div class='mx-2 my-2'>";
+      let i = 1;
+      for (let item in cart) {
+        popStr += `<b>${i}</b>. ${cart[item][1]}... Qty: ${cart[item][0]} Price: $${(cart[item][2] * cart[item][0]).toFixed(2)}<br>`;
+        i++;
+      }
+      document.getElementById('cartItems').innerHTML = popStr;
+    }
+  
+    function clearCart() {
+      localStorage.clear();
+      cart = {};
+      updateCart();
+    }
+  
+    function toggleCartPopover() {
+      const cartPopover = document.getElementById('cartPopover');
+      cartPopover.style.display = cartPopover.style.display === 'block' ? 'none' : 'block';
+      if (cartPopover.style.display === 'block') {
+        positionCartPopover();
+      }
+    }
+  
+    function positionCartPopover() {
+      const cartButton = document.getElementById('cartButton');
+      const cartPopover = document.getElementById('cartPopover');
+      const rect = cartButton.getBoundingClientRect();
+      cartPopover.style.top = `${rect.bottom + window.scrollY}px`;
+      cartPopover.style.left = `${rect.left + window.scrollX}px`;
+    }
+  </script>  
 </body>
 </html>
