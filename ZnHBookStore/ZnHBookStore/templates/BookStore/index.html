@@ -44,6 +44,9 @@
     .card-img-top {
       border-top-left-radius: 15px;
       border-top-right-radius: 15px;
+      height: 100px;
+      width: 150px;
+      object-fit: contain;
     }
     .card-body { padding: 1.25rem; }
     .card-title {
@@ -61,14 +64,14 @@
       border-color: #0056b3;
     }
     .popover-custom {
-      display: none; /* Initially hidden */
+      display: none;
       position: absolute;
       background-color: white;
       border: 1px solid #ddd;
       box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
       border-radius: 10px;
-      padding: 10px;
-      z-index: 1000;
+      padding: 5px;
+      z-index: 900;
     }
   </style>
 </head>
@@ -93,6 +96,9 @@
           <li class="nav-item">
             <a class="nav-link" href="/Tracker/">Tracker</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/contact/">Contact Us</a>
+        </li>
         </ul>
         <button type="button" class="btn btn-secondary mx-2" id="cartButton">
           Cart(<span id="cart">0</span>)
@@ -212,26 +218,26 @@
     });
   
     function addProductToCart(productId, target) {
-      const productName = target.getAttribute('data-product-name');
-      const productPrice = parseFloat(target.getAttribute('data-price'));
+  const productName = target.getAttribute('data-product-name');
+  const productPrice = parseFloat(target.getAttribute('data-price'));
+
+  if (cart[productId]) {
+    cart[productId][0] += 1;
+  } else {
+    cart[productId] = [1, productName, productPrice];
+  }
+  updateCart();
+}
   
-      if (cart[productId]) {
-        cart[productId][0] += 1;
-      } else {
-        cart[productId] = [1, productName, productPrice];
-      }
-      updateCart();
-    }
+    // function replaceAddToCartButton(productId) {
+    //   let buttonContainer = document.getElementById('buttonContainer' + productId);
+    //   buttonContainer.innerHTML = getQuantityButtonsHtml(productId);
+    // }
   
-    function replaceAddToCartButton(productId) {
-      let buttonContainer = document.getElementById('buttonContainer' + productId);
-      buttonContainer.innerHTML = getQuantityButtonsHtml(productId);
-    }
-  
-    function restoreAddToCartButton(productId) {
-      let buttonContainer = document.getElementById('buttonContainer' + productId);
-      buttonContainer.innerHTML = `<button class='btn btn-primary cart btn-add-to-cart' data-product-id='${productId}'>Add to Cart</button>`;
-    }
+    // function restoreAddToCartButton(productId) {
+    //   let buttonContainer = document.getElementById('buttonContainer' + productId);
+    //   buttonContainer.innerHTML = `<button class="btn btn-primary cart btn-add-to-cart" data-product-id="{{ i.id }}" data-product-name="{{ i.book_name }}" data-price="{{ i.price }}">Add to Cart</button>`;
+    // }
   
     function adjustItemQuantity(button) {
       const id = button.id.slice(5);
@@ -257,39 +263,46 @@
     }
   
     function updateCart() {
-      let totalItems = 0;
-      let totalPrice = 0;
-      for (let item in cart) {
-        totalItems += cart[item][0];
-        totalPrice += cart[item][0] * cart[item][2];
-  
-        let itemDisplay = document.getElementById('buttonContainer' + item);
-        if (itemDisplay && cart[item][0] > 0) {
-          itemDisplay.innerHTML = getQuantityButtonsHtml(item);
-        } else if (itemDisplay) {
-          restoreAddToCartButton(item);
-        }
-      }
+  let totalItems = 0;
+  let totalPrice = 0;
 
-      localStorage.setItem('cart', JSON.stringify(cart));
-      localStorage.setItem('totalPrice', totalPrice.toFixed(2)); // Save total price
-      document.getElementById('cart').textContent = totalItems;
-      document.getElementById('totalPrice').textContent = totalPrice.toFixed(2);
-      updatePopover();
+  for (let item in cart) {
+    if (cart.hasOwnProperty(item)) {
+      totalItems += cart[item][0]; // Update total items count
+      totalPrice += cart[item][0] * cart[item][2]; // Update total price
+
+      // Update quantity buttons HTML
+      let itemDisplay = document.getElementById('buttonContainer' + item);
+      if (itemDisplay && cart[item][0] > 0) {
+        itemDisplay.innerHTML = getQuantityButtonsHtml(item);
+      } else if (itemDisplay) {
+        restoreAddToCartButton(item);
+      }
     }
+  }
+
+  // Update cart and total price in storage and UI
+  localStorage.setItem('cart', JSON.stringify(cart));
+  document.getElementById('cart').textContent = totalItems;
+  document.getElementById('totalPrice').textContent = totalPrice.toFixed(2);
+  updatePopover();
+}
+
     function goToCheckout() {
     updateCart();  // Ensure the cart is updated
     window.location.href = '/checkout/';
 }
-    function updatePopover() {
-      let popStr = "<div class='mx-2 my-2'>";
-      let i = 1;
-      for (let item in cart) {
-        popStr += `<b>${i}</b>. ${cart[item][1]}... Qty: ${cart[item][0]} Price: $${(cart[item][2] * cart[item][0]).toFixed(2)}<br>`;
-        i++;
-      }
-      document.getElementById('cartItems').innerHTML = popStr;
+function updatePopover() {
+  let popStr = "<div class='mx-2 my-2'><p>Your shopping cart:</p>";
+  let i = 1;
+  for (let item in cart) {
+    if (cart.hasOwnProperty(item)) {
+      popStr += `<b>${i}</b>. ${cart[item][1]}... Qty: ${cart[item][0]} Price: $${(cart[item][2] * cart[item][0]).toFixed(2)}<br>`;
+      i++;
     }
+  } 
+  document.getElementById('cartItems').innerHTML = popStr;
+}
   
     function clearCart() {
       localStorage.clear();

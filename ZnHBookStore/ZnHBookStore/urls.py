@@ -32,6 +32,7 @@ urlpatterns = [
     path("BookStore/", views.BookStoreView, name='BookStore'),
     path("checkout/", views.checkout, name="Checkout"),
     path("Tracker/", views.tracker, name="TrackingStatus"),
+    path("paytm/", views.checkout, name='checkout')
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
