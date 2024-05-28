@@ -5,7 +5,7 @@ from django.contrib.auth import login, authenticate, logout
 from .forms import CustomUserCreationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import LoginPageSettings, BookStore, Orders, OrderUpdate
+from .models import LoginPageSettings, BookStore, Orders, OrderUpdate, Contact
 from math import ceil
 from paytm import Checksum
 MERCHANT_KEY = 'Your-Merchant-Key-Here'
@@ -125,3 +125,15 @@ def profile(request):
     user = request.user
 
     return render(request, "profile/index.html")
+
+def contact(request):
+    thank = False
+    if request.method=="POST":
+        name = request.POST.get('name', '')
+        email = request.POST.get('email', '')
+        phone = request.POST.get('phone', '')
+        desc = request.POST.get('desc', '')
+        contact = Contact(name=name, email=email, phone=phone, desc=desc)
+        contact.save()
+        thank = True
+    return render(request, 'contact/index.html', {'thank': thank})
