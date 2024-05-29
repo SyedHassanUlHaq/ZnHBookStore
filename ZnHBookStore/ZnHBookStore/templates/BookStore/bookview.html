@@ -1,167 +1,146 @@
 <!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+  <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
         integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
         crossorigin="anonymous">
 
-    <title>{{ product.book_name }} -- ZnH Book Store</title>
-    {% load static %}
-    <style>
-      body {
-        background-image: url('{% static "ZnHBookStore/images/back.jpg" %}');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-      }
-      .col-md-3 {
-        display: inline-block;
-        margin-left: -4px;
-      }
+      <title>{{ product.book_name }} -- ZnH Book Store</title>
+      {% load static %}
+      <style>
+        body {
+          background-image: url('{% static "ZnHBookStore/images/back.jpg" %}');
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+        }
+        .col-md-3 {
+          display: inline-block;
+          margin-left: -4px;
+        }
 
-      .carousel-indicators .active {
-        background-color: blue;
-      }
+        .carousel-indicators .active {
+          background-color: blue;
+        }
 
-      .col-md-3 img {
-        width: 170px;
-        height: 200px;
-      }
+        .col-md-3 img {
+          width: 170px;
+          height: 200px;
+        }
 
-      body .carousel-indicator li {
-        background-color: blue;
-      }
+        body .carousel-indicator li {
+          background-color: blue;
+        }
 
-      body .carousel-indicators {
-        bottom: 0;
-      }
+        body .carousel-indicators {
+          bottom: 0;
+        }
 
-      body .carousel-control-prev-icon,
-      body .carousel-control-next-icon {
-        background-color: blue;
-      }
+        body .carousel-control-prev-icon,
+        body .carousel-control-next-icon {
+          background-color: blue;
+        }
 
         .carousel-control-prev,
         .carousel-control-next {
-            top: auto;
-            bottom: auto;
-            padding-top: 222px;
+          top: auto;
+          bottom: auto;
+          padding-top: 222px;
         }
-
         body .no-padding {
-            padding-left: 0;
-            padding-right: 0;
+          padding-left: 0;
+          padding-right: 0;
         }
-
         .exercise-details {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px; 
+          background-color: white;
+          border-radius: 10px;
+          padding: 20px;
+          margin-top: 20px; 
         }
-
         .exercise-details img {
-            width: 100%; 
-            border-radius: 8px; 
-            margin-bottom: 15px; 
+          width: 100%; 
+          border-radius: 8px; 
+          margin-bottom: 15px; 
         }
 
         .exercise-steps {
-            max-width: 800px;
-            margin: 0 auto;
-            overflow: hidden;
-            border-radius: 10px;
-            padding: 20px; 
-            margin-top: 20px; 
-            background-color: white;
+          max-width: 800px;
+          margin: 0 auto;
+          overflow: hidden;
+          border-radius: 10px;
+          padding: 20px; 
+          margin-top: 20px; 
+          background-color: white;
         }
 
         .row {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+          display: flex;
+          justify-content: center;
+          align-items: center;
         }
-
         .col-md-2 {
-            flex: 0 0 16.66667%;
-            max-width: 16.66667%;
-            position: relative;
+          flex: 0 0 16.66667%;
+          max-width: 16.66667%;
+          position: relative;
         }
-
         .mb-3 {
-            margin-bottom: 1rem;
+          margin-bottom: 1rem;
         }
-
         .img-fluid {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px; 
-            transition: transform 0.3s ease-in-out;
+          max-width: 100%;
+          height: auto;
+          border-radius: 8px; 
+          transition: transform 0.3s ease-in-out;
         }
-
         .text-center {
-            text-align: center;
+          text-align: center;
         }
-
         .col-md-2:hover .img-fluid {
-            transform: scale(1.5);
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1000;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+          transform: scale(1.5);
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          z-index: 1000;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-
-        /* Optional: Style the Step text */
         .text-center {
-            font-weight: bold;
+          font-weight: bold;
         }
-    </style>
-</head>
-
-<body>
-
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="/">ZnH Book Store</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      </style>
+    </head>
+    <body>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="/BookStore/">BookStore</a>
-                </li>
-
-                <!-- <li class="nav-item">
-                    <a class="nav-link" href="/Meal_Tracker/">Meal Tracker</a>
-                </li> -->
-
-                <li class="nav-item">
-                    <a class="nav-link" href="/Blog/">Blog</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="/Tracker/">Tracker</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/contact/">Contact Us</a>
+              <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="/BookStore/">BookStore</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/Blog/">Blog</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/Tracker/">Tracker</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/contact/">Contact Us</a>
               </li>
             </ul>
             <form class="form-inline my-2 my-lg-0">
-                {% csrf_token %}
-                <a class="btn btn-outline-success my-2 my-sm-0" href="{% url 'logout' %}">Logout</a>
+              {% csrf_token %}
+              <a class="btn btn-outline-success my-2 my-sm-0" href="{% url 'logout' %}">Logout</a>
             </form>
+          </div>
         </div>
-    </div>
-</nav>
+      </nav>
 <div class="container my-4 exercise-details">
   <div class="row">
       <div class="col-md-4">
@@ -177,7 +156,7 @@
 </div>
 
 <div class="exercise-steps">
-  <h2 style="font-size: 32px; font-weight: bold; color: #007bff; border-bottom: 2px solid #007bff; padding-bottom: 10px;">Exercise Steps</h2>
+  <h2 style="font-size: 32px; font-weight: bold; color: #007bff; border-bottom: 2px solid #007bff; padding-bottom: 10px;">Similar Genre Books</h2>
   <div class="row">
       <div class="col-md-2 mb-3">
           <img src="{{ product.step1_image.url }}" alt="Step 1" class="img-fluid">
