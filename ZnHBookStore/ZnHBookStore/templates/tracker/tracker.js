@@ -7,7 +7,7 @@ $('#trackerForm').submit(function(event) {
     };
     $.ajax({
             type: 'POST',
-            url: '/shop/tracker/',
+            url: '/tracker/',
             data: formData,
             encode: true
         })
