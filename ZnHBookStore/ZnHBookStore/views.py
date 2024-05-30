@@ -22,7 +22,7 @@ def loginn(request):
         if user is not None:
             login(request, user)
             messages.success(request, 'Login successful.')
-            return redirect('profile/index.html')
+            return render(request, 'profile/index.html')
         else:
             messages.error(request, 'Invalid login credentials. Please try again.')
 
