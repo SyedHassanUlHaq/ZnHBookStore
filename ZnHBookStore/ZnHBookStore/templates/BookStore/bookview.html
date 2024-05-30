@@ -109,6 +109,24 @@
         .text-center {
           font-weight: bold;
         }
+        .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+    .btn-primary:hover {
+      background-color: #0056b3;
+      border-color: #0056b3;
+    }
+    .popover-custom {
+    display: none;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ddd;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 5px;
+    z-index: 900;
+}
       </style>
     </head>
     <body>
@@ -134,6 +152,18 @@
                 <a class="nav-link" href="/contact/">Contact Us</a>
               </li>
             </ul>
+            <button type="button" class="btn btn-secondary mx-2" id="cartButton">
+              Cart(<span id="cart">0</span>)
+          </button>
+          <div id="cartPopover" class="popover-custom">
+              <h5>Cart for your items in my shopping cart</h5>
+              <div class='mx-2 my-2' id="cartItems"></div>
+              <div id="totalPriceContainer">
+                  <h5>Total Price: $<span id="totalPrice">0</span></h5>
+              </div>
+              <a href='/checkout/'><button class='btn btn-primary' id='checkout'>Checkout</button></a>
+              <button class='btn btn-primary' id='clearCart'>Clear Cart</button>
+          </div>
             <form class="form-inline my-2 my-lg-0">
               {% csrf_token %}
               <a class="btn btn-outline-success my-2 my-sm-0" href="{% url 'logout' %}">Logout</a>
@@ -194,43 +224,50 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
   integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
   crossorigin="anonymous"></script>
-  <!-- <script>
-    if (localStorage.getItem('cart') == null) {
-      var cart = {};
-  } else {
-      cart = JSON.parse(localStorage.getItem('cart'));
-  }
-  console.log(cart);
-  var sum = 0;
-  var totalPrice = 0;
-  if ($.isEmptyObject(cart)) {
-      //if object is empty
-      mystr = `<p>Your cart is empty, please add some items to your cart before checking out!</p>`
-      $('#items').append(mystr);
-  } else {
-      for (item in cart) {
-          let name = cart[item][1];
-          let qty = cart[item][0];
-          let itemPrice = cart[item][2];
-          sum = sum + qty;
-          totalPrice = totalPrice + qty* itemPrice;
-          mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
-                      ${name}
-                      <span class="badge badge-primary badge-pill">${qty}</span>
-                  </li>`
-          $('#items').append(mystr);
-      }
-  }
-  document.getElementById('cart').innerHTML = sum;
-  document.getElementById('totalPrice').innerHTML = totalPrice;
-  $('#itemsJson').val(JSON.stringify(cart));
-  {% if thank %}
-  alert('Thanks for ordering with us. Your order is is {{id}}. Use it to track your order using our order tracker');
-  localStorage.clear();
-  document.location = "/shop";
-  {% endif %}
-  $('#amount').val($('#totalPrice').html())
-</script>   -->
+  <script>
+      $(document).ready(function() {
+        var cart = {};
+    
+        $('#cartButton').on('click', function() {
+          var $popover = $('#cartPopover');
+          var $button = $(this);
+          var offset = $button.offset();
+          var buttonHeight = $button.outerHeight();
+          var buttonWidth = $button.outerWidth();
+          var popoverHeight = $popover.outerHeight();
+          var popoverWidth = $popover.outerWidth();
+    
+          // Position the popover below the button, centered horizontally
+          $popover.css({
+            top: offset.top + buttonHeight + 10 + 'px', // 10px offset for spacing
+            left: offset.left + (buttonWidth / 2) - (popoverWidth / 2) + 'px'
+          });
+    
+          $popover.toggle();
+        });
+    
+        // Hide the popover if clicking outside
+        $(document).on('click', function(e) {
+          if (!$(e.target).closest('#cartButton').length && !$(e.target).closest('#cartPopover').length) {
+            $('#cartPopover').hide();
+          }
+        });
+    
+        // Function to update cart count and total price
+        function updateCartCount() {
+          var totalItems = Object.values(cart).reduce((acc, curr) => acc + curr.quantity, 0);
+          var totalPrice = Object.values(cart).reduce((acc, curr) => acc + (curr.quantity * curr.price), 0);
+    
+          $('#cart').text(totalItems);
+          $('#totalPrice').text(totalPrice.toFixed(2)); // Display total price with two decimal places
+        }
+              // Clear cart button click event
+              $('#clearCart').on('click', function() {
+          cart = {};
+          updateCartCount();
+        });
+      });
+</script>  
 
 </body>
 </html>

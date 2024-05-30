@@ -7,7 +7,6 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import LoginPageSettings, BookStore, Orders, OrderUpdate, Contact
 from math import ceil
-from paytm import Checksum
 MERCHANT_KEY = 'Your-Merchant-Key-Here'
 
 # Create your views here.
@@ -23,7 +22,7 @@ def loginn(request):
         if user is not None:
             login(request, user)
             messages.success(request, 'Login successful.')
-            return redirect('GymFreak')
+            return redirect('profile/index.html')
         else:
             messages.error(request, 'Invalid login credentials. Please try again.')
 
@@ -34,7 +33,6 @@ def custom_logout(request):
         logout(request)
         return redirect('loginn')
     return redirect('loginn')
-
 
 def signup(request):
     if request.method == 'POST':
@@ -49,19 +47,19 @@ def signup(request):
     login_page_settings = LoginPageSettings.objects.first()
     return render(request, 'signup/index.html', {'login_page_settings': login_page_settings, 'form': form})
 
-def custom_logout(request):
-    if request.method == 'POST':
-        logout(request)
-        return redirect('loginn')
-    return redirect('loginn')
-
+@login_required
 def index(request):
-    return render(request, 'profile/index.html')
+    updates = OrderUpdate.objects.all()
+    context = {
+        'updates': updates,
+    }
+    return render(request, 'profile/index.html', context)
 
-# @login_required
+@login_required
 def blog(request):
     return render(request, 'Blog/index.html')
 
+@login_required
 def BookStoreView(request):
     categories = BookStore.objects.values_list('category', flat=True).distinct()
 
@@ -74,16 +72,19 @@ def BookStoreView(request):
 
     return render(request, 'BookStore/index.html', {'allProds': allProds})
 
+@login_required
 def BookView(request, book_id):
     book = get_object_or_404(BookStore, book_id=book_id)
     return render(request, 'BookStore/bookview.html', {'product': book})
 
+@login_required
 def checkout(request):
     if request.method=="POST":
         return render(request, 'order/order.html')
 
     return render(request, 'checkout/checkout.html')
 
+@login_required
 def tracker(request):
     if request.method=="POST":
         orderId = request.POST.get('orderId', '')
@@ -104,28 +105,31 @@ def tracker(request):
 
     return render(request, 'tracker/tracker.html')
 
-def handlerequest(request):
-    # paytm will send you post request here
-    form = request.POST
-    response_dict = {}
-    for i in form.keys():
-        response_dict[i] = form[i]
-        if i == 'CHECKSUMHASH':
-            checksum = form[i]
+# @login_required
+# def handlerequest(request):
+#     # paytm will send you post request here
+#     form = request.POST
+#     response_dict = {}
+#     for i in form.keys():
+#         response_dict[i] = form[i]
+#         if i == 'CHECKSUMHASH':
+#             checksum = form[i]
 
-    verify = Checksum.verify_checksum(response_dict, MERCHANT_KEY, checksum)
-    if verify:
-        if response_dict['RESPCODE'] == '01':
-            print('order successful')
-        else:
-            print('order was not successful because' + response_dict['RESPMSG'])
-    return render(request, 'paymentstatus/paymentstatus.html', {'response': response_dict})
+#     verify = Checksum.verify_checksum(response_dict, MERCHANT_KEY, checksum)
+#     if verify:
+#         if response_dict['RESPCODE'] == '01':
+#             print('order successful')
+#         else:
+#             print('order was not successful because' + response_dict['RESPMSG'])
+#     return render(request, 'paymentstatus/paymentstatus.html', {'response': response_dict})
 
+@login_required
 def profile(request):
     user = request.user
 
     return render(request, "profile/index.html")
 
+@login_required
 def contact(request):
     thank = False
     if request.method=="POST":
