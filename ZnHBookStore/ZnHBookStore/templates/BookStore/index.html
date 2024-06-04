@@ -101,7 +101,8 @@
             <a class="nav-link" href="/contact/">Contact Us</a>
           </li>
         </ul>
-        <button type="button" class="btn btn-secondary mx-2" id="popcart" data-container="body" data-toggle="popover" data-placement="bottom" data-html="true" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">
+        </a> <button class='btn btn-danger' onclick='clearCart()' id='clearCart'>Clear Cart</button>
+        <button type="button" class="btn btn-secondary mx-2" id="popcart" data-container="body" data-toggle="popover" data-placement="bottom" data-html="true">
           Cart(<span id="cart">0</span>)
         </button>
       </div>
@@ -133,7 +134,7 @@
                   <div class="card-body">
                     <h5 class="card-title">{{i.book_name}}</h5>
                     <p class="card-text">{{i.desc|slice:"0:53"}}...</p>
-                    <button id="pr{{i.id}}" class="btn btn-primary cart">Add To Cart</button>
+                    <button id="pr{{i.book_id}}" class="btn btn-primary cart">Add To Cart</button>
                     <a href="/book/{{i.book_id}}"><button id="qv{{i.book_id}}" class="btn btn-primary cart">QuickView</button></a>
                   </div>
                 </div>
@@ -163,89 +164,80 @@
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
   <script>
-    // Initialize the cart from localStorage
-    if (localStorage.getItem('cart') == null) {
-        var cart = {};
-    } else {
-        var cart = JSON.parse(localStorage.getItem('cart'));
-        updateCart(cart);
-    }
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize the cart from localStorage
+      let cart = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : {};
 
-    // If the add to cart button is clicked, add/increment the item
-    $(document).on('click', 'button.cart', function(){
-        var idstr = this.id.toString();
-        if (cart[idstr] != undefined) {
-            cart[idstr] += 1;
-        } else {
-            cart[idstr] = 1;
-        }
-        updateCart(cart);
-    });
+      // Update the cart count on page load
+      updateCart(cart);
 
-    // Add Popover to cart
-    $('#popcart').popover();
-    updatePopover(cart);
+      // If the add to cart button is clicked, add/increment the item
+      $(document).on('click', 'button.cart', function(){
+          let idstr = this.id.toString();
+          cart[idstr] = cart[idstr] ? cart[idstr] + 1 : 1;
+          updateCart(cart);
+      });
 
-    function updatePopover(cart) {
-        // console.log('We are inside updatePopover');
-        var popStr = "<h5> Cart for your items in my shopping cart </h5><div class='mx-2 my-2'>";
-        var i = 1;
-        for (var item in cart) {
-            var itemElement = document.getElementById('pr' + item.slice(2));
-            if (itemElement) {
-                var itemName = itemElement.closest('.card-body').querySelector('.card-title').innerHTML;
-                popStr += "<b>" + i + "</b>. ";
-                popStr += itemName.slice(0, 19) + "... Qty: " + cart[item] + '<br>';
-                i += 1;
-            }
-        }
-        popStr += "</div> <a href='/checkout/'><button class='btn btn-primary' id ='checkout'>Checkout</button></a> <button class='btn btn-primary' onclick='clearCart()' id ='clearCart'>Clear Cart</button>";
-        // console.log(popStr);
-        $('#popcart').attr('data-content', popStr);
-        $('#popcart').popover('show');
-    }
+      // Add Popover to cart
+      $('#popcart').popover();
+      updatePopover(cart);
 
-    function clearCart() {
-        for (var item in cart) {
-            var itemElement = document.getElementById('div' + item);
-            if (itemElement) {
-                itemElement.innerHTML = '<button id="' + item + '" class="btn btn-primary cart">Add To Cart</button>';
-            }
-        }
-        localStorage.clear();
-        cart = {};
-        updateCart(cart);
-    }
+      function updatePopover(cart) {
+          let popStr = "<h5> Cart for your items in my shopping cart </h5><div class='mx-2 my-2'>";
+          let i = 1;
+          for (let item in cart) {
+              let itemElement = document.getElementById('pr' + item.slice(2));
+              if (itemElement) {
+                  let itemName = itemElement.closest('.card-body').querySelector('.card-title').innerHTML;
+                  popStr += `<b>${i}</b>. ${itemName.slice(0, 19)}... Qty: ${cart[item]}<br>`;
+                  i += 1;
+              }
+          }
+          popStr += `<div class='d-flex justify-content-between mt-3'><a href='/checkout/' class='btn btn-primary' id='checkout'>Checkout</a> <button class='btn btn-danger' onclick='clearCart()' id='clearCart'>Clear Cart</button></div>`;
+          $('#popcart').attr('data-content', popStr).popover('show');
+      }
 
-    function updateCart(cart) {
-        var sum = 0;
-        for (var item in cart) {
-            sum += cart[item];
-            var itemElement = document.getElementById('div' + item);
-            if (itemElement) {
-                itemElement.innerHTML = "<button id='minus" + item + "' class='btn btn-primary minus'>-</button> <span id='val" + item + "'>" + cart[item] + "</span> <button id='plus" + item + "' class='btn btn-primary plus'> + </button>";
-            }
-        }
-        localStorage.setItem('cart', JSON.stringify(cart));
-        document.getElementById('cart').innerHTML = sum;
-        // console.log(cart);
-        updatePopover(cart);
-    }
+      function clearCart() {
+          for (let item in cart) {
+              let itemElement = document.getElementById('div' + item);
+              if (itemElement) {
+                  itemElement.innerHTML = `<button id="${item}" class="btn btn-primary cart">Add To Cart</button>`;
+              }
+          }
+          localStorage.clear();
+          cart = {};
+          updateCart(cart);
+      }
 
-    // If plus or minus button is clicked, change the cart as well as the display value
-    $(document).on("click", "button.minus", function() {
-        var a = this.id.slice(7);
-        cart['pr' + a] = cart['pr' + a] - 1;
-        cart['pr' + a] = Math.max(0, cart['pr' + a]);
-        document.getElementById('valpr' + a).innerHTML = cart['pr' + a];
-        updateCart(cart);
-    });
+      function updateCart(cart) {
+          let sum = 0;
+          for (let item in cart) {
+              sum += cart[item];
+              let itemElement = document.getElementById('div' + item);
+              if (itemElement) {
+                  itemElement.innerHTML = `<button id="minus${item}" class="btn btn-primary minus">-</button> <span id="val${item}">${cart[item]}</span> <button id="plus${item}" class="btn btn-primary plus"> + </button>`;
+              }
+          }
+          localStorage.setItem('cart', JSON.stringify(cart));
+          document.getElementById('cart').innerHTML = sum;
+          updatePopover(cart);
+      }
 
-    $(document).on("click", "button.plus", function() {
-        var a = this.id.slice(6);
-        cart['pr' + a] += 1;
-        document.getElementById('valpr' + a).innerHTML = cart['pr' + a];
-        updateCart(cart);
+      // If plus or minus button is clicked, change the cart as well as the display value
+      $(document).on("click", "button.minus", function() {
+          let a = this.id.slice(7);
+          cart['pr' + a] = cart['pr' + a] - 1;
+          cart['pr' + a] = Math.max(0, cart['pr' + a]);
+          document.getElementById('valpr' + a).innerHTML = cart['pr' + a];
+          updateCart(cart);
+      });
+
+      $(document).on("click", "button.plus", function() {
+          let a = this.id.slice(6);
+          cart['pr' + a] += 1;
+          document.getElementById('valpr' + a).innerHTML = cart['pr' + a];
+          updateCart(cart);
+      });
     });
   </script>
 </body>
