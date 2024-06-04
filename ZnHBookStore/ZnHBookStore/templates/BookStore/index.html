@@ -193,11 +193,11 @@
                   i += 1;
               }
           }
-          popStr += `<div class='d-flex justify-content-between mt-3'><a href='/checkout/' class='btn btn-primary' id='checkout'>Checkout</a> <button class='btn btn-danger' onclick='clearCart()' id='clearCart'>Clear Cart</button></div>`;
+          popStr += `<div class='d-flex justify-content-between mt-3'><a href='/checkout/' class='btn btn-primary' id='checkout'>Checkout</a></div>`;
           $('#popcart').attr('data-content', popStr).popover('show');
       }
 
-      function clearCart() {
+      window.clearCart = function() {
           for (let item in cart) {
               let itemElement = document.getElementById('div' + item);
               if (itemElement) {
