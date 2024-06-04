@@ -7,7 +7,10 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import LoginPageSettings, BookStore, Orders, OrderUpdate, Contact
 from math import ceil
-MERCHANT_KEY = 'Your-Merchant-Key-Here'
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 
@@ -47,7 +50,7 @@ def signup(request):
     login_page_settings = LoginPageSettings.objects.first()
     return render(request, 'signup/index.html', {'login_page_settings': login_page_settings, 'form': form})
 
-@login_required
+# @login_required
 def index(request):
     updates = OrderUpdate.objects.all()
     context = {
@@ -55,11 +58,11 @@ def index(request):
     }
     return render(request, 'profile/index.html', context)
 
-@login_required
+# @login_required
 def blog(request):
     return render(request, 'Blog/index.html')
 
-@login_required
+# @login_required
 def BookStoreView(request):
     categories = BookStore.objects.values_list('category', flat=True).distinct()
 
@@ -72,19 +75,19 @@ def BookStoreView(request):
 
     return render(request, 'BookStore/index.html', {'allProds': allProds})
 
-@login_required
+# @login_required
 def BookView(request, book_id):
     book = get_object_or_404(BookStore, book_id=book_id)
     return render(request, 'BookStore/bookview.html', {'product': book})
 
-@login_required
+# @login_required
 def checkout(request):
     if request.method=="POST":
         return render(request, 'order/order.html')
 
     return render(request, 'checkout/checkout.html')
 
-@login_required
+# @login_required
 def tracker(request):
     if request.method=="POST":
         orderId = request.POST.get('orderId', '')
@@ -105,7 +108,7 @@ def tracker(request):
 
     return render(request, 'tracker/tracker.html')
 
-# @login_required
+# # @login_required
 # def handlerequest(request):
 #     # paytm will send you post request here
 #     form = request.POST
@@ -123,13 +126,13 @@ def tracker(request):
 #             print('order was not successful because' + response_dict['RESPMSG'])
 #     return render(request, 'paymentstatus/paymentstatus.html', {'response': response_dict})
 
-@login_required
+# @login_required
 def profile(request):
     user = request.user
 
     return render(request, "profile/index.html")
 
-@login_required
+# @login_required
 def contact(request):
     thank = False
     if request.method=="POST":

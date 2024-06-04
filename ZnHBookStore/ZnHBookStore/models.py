@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 class LoginPageSettings(models.Model):
     background_image = models.ImageField(upload_to='loginPage/')
-    
+
 class CustomUser(AbstractUser):
     profile_pic = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
     email = models.CharField(max_length=50, null=True, blank=True)
@@ -25,12 +25,11 @@ class CustomUser(AbstractUser):
         verbose_name='user permissions',
         help_text='Specific permissions for this user.',
     )
-    
+
 class BookStore(models.Model):
     book_id = models.AutoField(primary_key=True)
     book_name = models.CharField(max_length=50)
     category = models.CharField(max_length=50, default="")
-    subcategory = models.CharField(max_length=50, default="")
     desc = models.CharField(max_length=1000)
     pub_date = models.DateField()
     image = models.ImageField(upload_to='BookStore/images', default="")
@@ -44,11 +43,11 @@ class BookStore(models.Model):
 
     def __str__(self):
         return self.book_name
-    
+
 class Orders(models.Model):
     order_id = models.AutoField(primary_key=True)
     items_json = models.CharField(max_length=5000)
-    amount = models.IntegerField( default=0)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     name = models.CharField(max_length=90)
     email = models.CharField(max_length=111)
     address = models.CharField(max_length=111)
@@ -56,23 +55,27 @@ class Orders(models.Model):
     state = models.CharField(max_length=111)
     zip_code = models.CharField(max_length=111)
     phone = models.CharField(max_length=111, default="")
+    user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, related_name='orders', null=True, blank=True)
+
+    def __str__(self):
+        return f"Order {self.order_id} by {self.name}"
 
 class OrderUpdate(models.Model):
-    update_id  = models.AutoField(primary_key=True)
-    order_id = models.IntegerField(default="")
+    update_id = models.AutoField(primary_key=True)
+    order = models.ForeignKey(Orders, on_delete=models.CASCADE, related_name='updates', null=True, blank=True)
     update_desc = models.CharField(max_length=5000)
     timestamp = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return self.update_desc[0:7] + "..."
-    
+
 class Contact(models.Model):
     msg_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
     email = models.CharField(max_length=70, default="")
     phone = models.CharField(max_length=70, default="")
     desc = models.CharField(max_length=500, default="")
-
+    user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, related_name='contacts', null=True, blank=True)
 
     def __str__(self):
         return self.name
