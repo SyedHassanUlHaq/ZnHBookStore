@@ -50,10 +50,13 @@ def signup(request):
     login_page_settings = LoginPageSettings.objects.first()
     return render(request, 'signup/index.html', {'login_page_settings': login_page_settings, 'form': form})
 
-# @login_required
+@login_required
 def index(request):
     # Fetch all orders
     orders = Orders.objects.all()
+
+    # Get the currently logged-in user
+    user = request.user
 
     # Create a dictionary to store orders and their updates
     orders_with_updates = {}
@@ -64,15 +67,18 @@ def index(request):
         orders_with_updates[order] = updates
 
     context = {
+        'user_name': user.username,
+        'user_email': user.email,
+        'user_contact': user.contact_number,  # Assuming you have this field in your CustomUser model
         'orders_with_updates': orders_with_updates,
     }
     return render(request, 'profile/index.html', context)
 
-# @login_required
+@login_required
 def blog(request):
     return render(request, 'Blog/index.html')
 
-# @login_required
+@login_required
 def BookStoreView(request):
     categories = BookStore.objects.values_list('category', flat=True).distinct()
 
@@ -85,19 +91,19 @@ def BookStoreView(request):
 
     return render(request, 'BookStore/index.html', {'allProds': allProds})
 
-# @login_required
+@login_required
 def BookView(request, book_id):
     book = get_object_or_404(BookStore, book_id=book_id)
     return render(request, 'BookStore/bookview.html', {'product': book})
 
-# @login_required
+@login_required
 def checkout(request):
     if request.method=="POST":
         return render(request, 'order/order.html')
 
     return render(request, 'checkout/checkout.html')
 
-# @login_required
+@login_required
 def tracker(request):
     if request.method=="POST":
         items_json = request.POST.get('itemsJson', '')
@@ -150,12 +156,12 @@ def tracker(request):
 #     return render(request, 'paymentstatus/paymentstatus.html', {'response': response_dict})
 
 # @login_required
-def profile(request):
-    user = request.user
+# def profile(request):
+#     user = request.user
 
-    return render(request, "profile/index.html")
+#     return render(request, "profile/index.html")
 
-# @login_required
+@login_required
 def contact(request):
     thank = False
     if request.method=="POST":
