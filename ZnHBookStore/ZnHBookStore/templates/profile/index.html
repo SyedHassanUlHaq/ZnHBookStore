@@ -105,9 +105,6 @@
                     <a class="nav-link" href="/contact/">Contact Us</a>
                 </li>
               </ul>
-              <button type="button" class="btn btn-secondary mx-2" id="popcart" data-container="body" data-toggle="popover" data-placement="bottom" data-html="true" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">
-              Cart(<span id="cart">0</span>)
-              </button>
               <form class="form-inline my-2 my-lg-0">
                   {% csrf_token %}
                   <a class="btn btn-outline-success my-2 my-sm-0" href="{% url 'loginn' %}">Logout</a>
@@ -132,17 +129,35 @@
             </div>
 
             <div class="col-md-9 main-section">
-                <h3>Order Updates</h3>
-                <ul class="list-group">
-                    {% for update in updates %}
-                    <li class="list-group-item">
-                        <strong>Order ID:</strong> {{ update.order_id }} <br>
-                        <strong>Description:</strong> {{ update.update_desc }} <br>
-                        <strong>Date:</strong> {{ update.timestamp }}
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
+              <h3>Order Updates</h3>
+              {% for order, updates in orders_with_updates.items %}
+              <div class="card mb-3">
+                  <div class="card-header">
+                      Order ID: {{ order.order_id }}
+                  </div>
+                  <div class="card-body">
+                      <h5 class="card-title">Order Details</h5>
+                      <p class="card-text">
+                          Name: {{ order.name }} <br>
+                          Email: {{ order.email }} <br>
+                          Address: {{ order.address }}, {{ order.city }}, {{ order.state }}, {{ order.zip_code }} <br>
+                          Phone: {{ order.phone }}
+                      </p>
+                      <h5 class="card-title">Order Updates</h5>
+                      <ul class="list-group">
+                          {% for update in updates %}
+                          <li class="list-group-item">
+                              <strong>Date:</strong> {{ update.timestamp }} <br>
+                              <strong>Description:</strong> {{ update.update_desc }}
+                          </li>
+                          {% endfor %}
+                      </ul>
+                  </div>
+              </div>
+              {% empty %}
+              <p>No orders found.</p>
+              {% endfor %}
+          </div>          
         </div>
     </div>
 

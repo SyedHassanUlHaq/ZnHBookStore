@@ -52,9 +52,19 @@ def signup(request):
 
 # @login_required
 def index(request):
-    updates = OrderUpdate.objects.all()
+    # Fetch all orders
+    orders = Orders.objects.all()
+
+    # Create a dictionary to store orders and their updates
+    orders_with_updates = {}
+
+    # Loop through each order and fetch its updates
+    for order in orders:
+        updates = OrderUpdate.objects.filter(order=order)
+        orders_with_updates[order] = updates
+
     context = {
-        'updates': updates,
+        'orders_with_updates': orders_with_updates,
     }
     return render(request, 'profile/index.html', context)
 
@@ -90,6 +100,19 @@ def checkout(request):
 # @login_required
 def tracker(request):
     if request.method=="POST":
+        items_json = request.POST.get('itemsJson', '')
+        name = request.POST.get('name', '')
+        email = request.POST.get('email', '')
+        address = request.POST.get('address1', '') + " " + request.POST.get('address2', '')
+        city = request.POST.get('city', '')
+        state = request.POST.get('state', '')
+        zip_code = request.POST.get('zip_code', '')
+        phone = request.POST.get('phone', '')
+        order = Orders(items_json=items_json, name=name, email=email, address=address, city=city,
+                       state=state, zip_code=zip_code, phone=phone)
+        order.save()
+        thank = True
+        id = order.order_id
         orderId = request.POST.get('orderId', '')
         email = request.POST.get('email', '')
         try:

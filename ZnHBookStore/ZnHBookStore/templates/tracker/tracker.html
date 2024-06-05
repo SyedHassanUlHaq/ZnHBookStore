@@ -55,36 +55,36 @@
             </div>
         </div>
     </nav>
-<div class="container">
-    <div class="col my-4">
-        <h2>Enter your Order Id and Email address to track your order</h2>
-        <form method="post" action="#" id="trackerForm">{% csrf_token %}
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="inputname">Order Id</label>
-                    <input type="text" class="form-control" id="orderId" name="orderId" placeholder="Order Id">
+    <div class="container">
+        <div class="col my-4">
+            <h2>Enter your Order Id and Email address to track your order</h2>
+            <form method="post" action="#" id="trackerForm">{% csrf_token %}
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputname">Order Id</label>
+                        <input type="text" class="form-control" id="orderId" name="orderId" placeholder="Order Id">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputEmail4">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Track Order</button>
                 </div>
-                <div class="form-group col-md-6">
-                    <label for="inputEmail4">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Email">
-                </div>
-                <button type="submit" class="btn btn-primary">Track Order</button>
+        </div>
+        <div class="col my-4">
+            <h2>Your Order Status</h2>
+            <div class="my-4">
+                <ul class="list-group" id="items">
+                    Enter your order Id and Email and click Track Order to find details about your order!
+                </ul>
             </div>
-    </div>
-    <div class="col my-4">
-        <h2>Your Order Status</h2>
-        <div class="my-4">
-            <ul class="list-group" id="items">
-                Enter your order Id and Email and click Track Order to find details about your order!
-            </ul>
-        </div>
-        <h2>Your Order Details</h2>
-        <div class="my-4">
-            <ul class="list-group" id="citems">
-            </ul>
+            <h2>Your Order Details</h2>
+            <div class="my-4">
+                <ul class="list-group" id="citems">
+                </ul>
+            </div>
         </div>
     </div>
-</div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -93,6 +93,58 @@
   crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-    <script href = "tracker.js"></script>
+    <script>
+
+$('#trackerForm').submit(function(event) {
+    $('#items').empty();
+    var formData = {
+        'orderId': $('input[name=orderId]').val(),
+        'email': $('input[name=email]').val(),
+        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+    };
+    $.ajax({
+            type: 'POST',
+            url: '/shop/tracker/',
+            data: formData,
+            encode: true
+        })
+        .done(function(data) {
+            $('#citems').empty();
+            console.log(data)
+            data = JSON.parse(data);
+            if (data['status'] == 'success') {
+                updates = data['updates'];
+                for (i = 0; i < updates.length; i++) {
+                    let text = updates[i]['text'];
+                    let time = updates[i]['time'];
+                    mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
+                    ${text}
+                    <span class="badge badge-primary badge-pill">${time}</span>
+                </li>`
+                    $('#items').append(mystr);
+                }
+                // Fill in the order details
+                cart = JSON.parse(data['itemsJson']);
+                console.log(cart);
+                for (item in cart) {
+                    let name = cart[item][1];
+                    let qty = cart[item][0];
+                    mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
+                    ${name}
+                    <span class="badge badge-primary badge-pill">${qty}</span>
+                </li>`
+                    $('#citems').append(mystr);
+                }
+            } else {
+                mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
+                    Sorry, We are not able to fetch this order id and email. Make sure to type correct order Id and email</li>`
+                $('#items').append(mystr);
+                $('#citems').append(mystr);
+            }
+        });
+    event.preventDefault();
+});
+
+    </script>
   </body>
 </html>

@@ -1,157 +1,159 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-
-    <title>Checkout - My Awesome Cart</title>
-    {% load static %}
-    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
-    <style>
-        body {
-            background-color: #e9ecef;
-        }
-    </style>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <title>Checkout - My Awesome Cart</title>
+  {% load static %}
+  <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+  <style>
+    body {
+      background-color: #e9ecef;
+    }
+  </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="/">ZnH Book Store</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Home</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/BookStore/">BookStore</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Blog/">Blog</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Tracker/">Tracker</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/contact/">Contact Us</a>
-                    </li>
-                </ul>
-                <button type="button" class="btn btn-secondary mx-2" id="popcart" data-container="body" data-toggle="popover" data-placement="bottom" data-html="true">
-                    Cart(<span id="cart">0</span>)
-                </button>
-                <form class="form-inline my-2 my-lg-0">
-                    {% csrf_token %}
-                    <a class="btn btn-outline-success my-2 my-sm-0" href="{% url 'logout' %}">Logout</a>
-                </form>
-            </div>
-        </div>
-    </nav>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-        <div class="col my-4">
-            <h2>Step 1 - ZnH Book Store Express Checkout - Review Your Cart Items</h2>
-            <div class="my-4">
-                <ul class="list-group" id="items"></ul>
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb mt-3">
-                        <li class="breadcrumb-item active" aria-current="page">Your Cart Total Is <b>Rs. <span id="totalPrice"></span></b>. Enter your details below & place your order. Thanks for visiting ZnH Book Store!</li>
-                    </ol>
-                </nav>            
-            </div>
-        </div>
-        <div class="col my-4">
-            <h2>Step 2 - Enter Address & Other Details:</h2>
-            <form method="post" action="/checkout/">{% csrf_token %}
-                <input type="hidden" name="itemsJson" id="itemsJson">
-                <input type="hidden" name="amount" id="amount">
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="inputname">Name</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Name">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="inputEmail4">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Email">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="inputAddress">Address</label>
-                    <input type="text" class="form-control" id="address1" name="address1" placeholder="1234 Main St">
-                </div>
-                <div class="form-group">
-                    <label for="inputAddress2">Address line 2</label>
-                    <input type="text" class="form-control" id="address2" name="address2" placeholder="Apartment, studio, or floor">
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="inputCity">City</label>
-                        <input type="text" class="form-control" id="city" name="city">
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label for="inputState">State</label>
-                        <input type="text" class="form-control" id="state" name="state"  placeholder="Enter State">
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label for="inputZip">Zip</label>
-                        <input type="text" class="form-control" id="zip_code" name="zip_code">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="inputZip">Phone Number</label>
-                    <input type="tel" class="form-control" id="phone" name="phone">
-                </div>
-                <button type="submit" class="btn btn-primary">Place Order</button>
-            </form>
-        </div>
+      <a class="navbar-brand" href="/">ZnH Book Store</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/BookStore/">BookStore</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/Blog/">Blog</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/Tracker/">Tracker</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/contact/">Contact Us</a>
+          </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+          {% csrf_token %}
+          <a class="btn btn-outline-success my-2 my-sm-0" href="{% url 'logout' %}">Logout</a>
+        </form>
+      </div>
     </div>
+  </nav>
+  <div class="container">
+    <div class="col my-4">
+      <h2>Step 1 - ZnH Book Store Express Checkout - Review Your Cart Items</h2>
+      <div class="my-4">
+        <ul class="list-group" id="items"> </ul>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mt-3">
+            <li class="breadcrumb-item active" aria-current="page">Your Cart Total Is <b>Rs. <span id="totalPrice"></span></b>. Enter your details below & place your order. Thanks for visiting ZnH Book Store!</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+    <div class="col my-4">
+      <h2>Step 2 - Enter Address & Other Details:</h2>
+      <form method="post" action="/checkout/">{% csrf_token %}
+        <input type="hidden" name="itemsJson" id="itemsJson">
+        <input type="hidden" name="amount" id="amount">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputname">Name</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputEmail4">Email</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputAddress">Address</label>
+          <input type="text" class="form-control" id="address1" name="address1" placeholder="1234 Main St">
+        </div>
+        <div class="form-group">
+          <label for="inputAddress2">Address line 2</label>
+          <input type="text" class="form-control" id="address2" name="address2" placeholder="Apartment, studio, or floor">
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputCity">City</label>
+            <input type="text" class="form-control" id="city" name="city">
+          </div>
+          <div class="form-group col-md-4">
+            <label for="inputState">State</label>
+            <input type="text" class="form-control" id="state" name="state" placeholder="Enter State">
+          </div>
+          <div class="form-group col-md-2">
+            <label for="inputZip">Zip</label>
+            <input type="text" class="form-control" id="zip_code" name="zip_code">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputZip">Phone Number</label>
+          <input type="tel" class="form-control" id="phone" name="phone">
+        </div>
+        <button href="/paytm/" type="submit" class="btn btn-primary">Place Order</button>
+      </form>
+    </div>
+  </div>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-    <script>
-        if (localStorage.getItem('cart') == null) {
-            var cart = {};
-        } else {
-            cart = JSON.parse(localStorage.getItem('cart'));
-        }
-        console.log(cart);
-        var sum = 0;
-        var totalPrice = 0;
-        if ($.isEmptyObject(cart)) {
-            //if object is empty
-            mystr = `<p>Your cart is empty, please add some items to your cart before checking out!</p>`
-            $('#items').append(mystr);
-        } else {
-            for (item in cart) {
-                let name = cart[item].book_name;
-                let qty = cart[item].quantity;
-                let price = cart[item].price; // Assuming price is stored in the cart
-                sum = sum + qty;
-                totalPrice += price * qty;
-                mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
-                            ${name}
-                            <span class="badge badge-primary badge-pill">${qty}</span>
-                            <span>Rs. ${price * qty}</span>
-                        </li>`
-                $('#items').append(mystr);
-            }
-        }
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      let cart = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : {};
+      console.log(cart);
+    
+      var sum = 0;
+      var totalPrice = 0;
+if ($.isEmptyObject(cart)) {
+    //if object is empty
+    mystr = `<p>Your cart is empty, please add some items to your cart before checking out!</p>`
+    $('#items').append(mystr);
+} else {
+    for (item in cart) {
+        let name = cart[item][1];
+        let qty = cart[item][0];
+        let itemPrice = cart[item][2];
+        sum = sum + qty;
+        totalPrice = totalPrice + qty * itemPrice
+        mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
+                    ${name}
+                    <span class="badge badge-primary badge-pill">${qty}</span>
+                </li>`
+        $('#items').append(mystr);
+    }
+}
+    
+      if (document.getElementById('cart')) {
         document.getElementById('cart').innerHTML = sum;
-        $('#totalPrice').text(totalPrice);
-        $('#itemsJson').val(JSON.stringify(cart));
-        $('#amount').val(totalPrice);
-        {% if thank %}
-        alert('Thanks for ordering with us. Your order is {{order_id}}. Use it to track your order using our order tracker');
-        localStorage.clear();
-        document.location = "/BookStore/";
-        {% endif %}
+      }
+      if (document.getElementById('totalPrice')) {
+        document.getElementById('totalPrice').innerHTML = totalPrice;
+      }
+      if (document.getElementById('itemsJson')) {
+        document.getElementById('itemsJson').value = JSON.stringify(cart);
+      }
+      if (document.getElementById('amount')) {
+        document.getElementById('amount').value = totalPrice;
+      }
+      {% if thank %}
+      alert('Thanks for ordering with us. Your order is {{order_id}}. Use it to track your order using our order tracker');
+      localStorage.clear();
+      document.location = "/BookStore/";
+      {% endif %}
+    });
     </script>
 </body>
 </html>
